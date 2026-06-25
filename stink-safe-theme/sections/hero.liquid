@@ -1,0 +1,295 @@
+{%- liquid
+  assign cta_primary_url = section.settings.cta_primary_url | default: routes.collections_url
+  assign cta_secondary_url = section.settings.cta_secondary_url | default: '/pages/bundles'
+  assign hero_accents = '#F4A300,#7C3AED,#EC4899' | split: ','
+  assign hero_labels = 'Crimewave,Horror,Snackverse' | split: ','
+-%}
+
+<div class="hero full-width">
+  <div class="hero__dots" aria-hidden="true"></div>
+  <span class="hero__smiley" aria-hidden="true">☻</span>
+
+  <div class="hero__content">
+
+    {%- if section.settings.eyebrow_label != blank -%}
+      <p class="hero__eyebrow">{{- section.settings.eyebrow_label | escape -}}</p>
+    {%- endif -%}
+
+    <h1 class="hero__headline">
+      {{- section.settings.headline_line1 | default: 'Art You Love.' | escape -}}<br>
+      {{- section.settings.headline_line2 | default: "Smell You Don't." | escape -}}
+    </h1>
+
+    <svg class="hero__squiggle" viewBox="0 0 200 18" fill="none" stroke="#29791E" stroke-width="4" stroke-linecap="round" aria-hidden="true">
+      <path d="M4 11c18-11 36 7 56 3s38-12 58-6 38 10 78 2"/>
+    </svg>
+
+    <p class="hero__subcopy">
+      {{- section.settings.subheading | default: 'Premium smell-proof storage with collector-grade comic art. Lock in the freshness — flex the artwork.' | escape -}}
+    </p>
+
+    <div class="hero__collection-grid">
+      {%- for i in (1..3) -%}
+        {%- assign col_key = 'collection_' | append: i -%}
+        {%- assign hero_col = section.settings[col_key] -%}
+        {%- assign fallback_accent = hero_accents[forloop.index0] -%}
+        {%- assign fallback_label = hero_labels[forloop.index0] -%}
+        <a
+          href="{%- if hero_col != blank -%}{{ hero_col.url }}{%- else -%}{{ routes.collections_url }}{%- endif -%}"
+          class="hero__col-thumb"
+        >
+          {%- if hero_col != blank and hero_col.featured_image != blank -%}
+            {{ hero_col.featured_image | image_url: width: 280 | image_tag: loading: 'eager', fetchpriority: 'high', alt: hero_col.title }}
+          {%- else -%}
+            <div
+              class="hero__col-placeholder"
+              style="background: repeating-linear-gradient(135deg, {{ fallback_accent }}26, {{ fallback_accent }}26 7px, {{ fallback_accent }}0d 7px, {{ fallback_accent }}0d 14px); border: 1px dashed {{ fallback_accent }}70;"
+            >
+              <span style="color: {{ fallback_accent }}">{{- fallback_label -}}</span>
+            </div>
+          {%- endif -%}
+        </a>
+      {%- endfor -%}
+    </div>
+
+    <div class="hero__ctas">
+      <a href="{{ cta_primary_url }}" class="hero__btn hero__btn--primary">
+        {{- section.settings.cta_primary_text | default: 'Shop all bags' | escape -}}
+      </a>
+      <a href="{{ cta_secondary_url }}" class="hero__btn hero__btn--secondary">
+        {{- section.settings.cta_secondary_text | default: 'Explore bundles' | escape -}}
+      </a>
+    </div>
+
+    <p class="hero__trust">
+      <span class="hero__star" aria-hidden="true">★</span>
+      {{- section.settings.trust_line | default: '4.9 · 300+ collectors · Ships discreetly' | escape -}}
+    </p>
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-mist);
+    border-radius: 0 0 26px 26px;
+    padding: 22px 16px 26px;
+  }
+  .hero__dots {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(36, 99, 235, 0.10) 1.4px, transparent 1.6px);
+    background-size: 14px 14px;
+    pointer-events: none;
+  }
+  .hero__smiley {
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    font: 600 25px/1 var(--font-body);
+    color: #29791E;
+    pointer-events: none;
+    user-select: none;
+  }
+  .hero__content {
+    position: relative;
+  }
+  .hero__eyebrow {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-blue);
+    margin: 0;
+  }
+  .hero__headline {
+    font-family: var(--font-display);
+    font-size: 34px;
+    line-height: 1.04;
+    font-weight: 800;
+    color: var(--color-ink);
+    letter-spacing: -0.02em;
+    margin: 12px 0 0;
+  }
+  .hero__squiggle {
+    width: 176px;
+    height: 15px;
+    margin-top: 7px;
+    display: block;
+  }
+  .hero__subcopy {
+    font-family: var(--font-body);
+    font-size: 13px;
+    line-height: 1.55;
+    font-weight: 400;
+    color: var(--color-slate);
+    margin: 12px 0 0;
+    max-width: 300px;
+  }
+  .hero__collection-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .hero__col-thumb {
+    display: block;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 112px;
+    text-decoration: none;
+  }
+  .hero__col-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .hero__col-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero__col-placeholder span {
+    font-family: var(--font-label);
+    font-size: 9px;
+    font-weight: 500;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 0 6px;
+    opacity: 0.9;
+    line-height: 1.3;
+  }
+  .hero__ctas {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .hero__btn {
+    flex: 1;
+    border-radius: 12px;
+    padding: 14px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    line-height: 1;
+    box-sizing: border-box;
+  }
+  .hero__btn--primary {
+    background: var(--color-blue);
+    color: var(--color-white);
+    box-shadow: 0 8px 18px rgba(36, 99, 235, 0.28);
+  }
+  .hero__btn--secondary {
+    background: var(--color-white);
+    color: var(--color-blue);
+    border: 1.5px solid var(--color-blue);
+  }
+  .hero__trust {
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--color-slate);
+    margin-top: 14px;
+    text-align: center;
+  }
+  .hero__star {
+    color: var(--color-sun);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow_label",
+      "label": "t:labels.eyebrow_label",
+      "default": "Drop No. 001 — Limited Series"
+    },
+    {
+      "type": "text",
+      "id": "headline_line1",
+      "label": "t:labels.headline_line1",
+      "default": "Art You Love."
+    },
+    {
+      "type": "text",
+      "id": "headline_line2",
+      "label": "t:labels.headline_line2",
+      "default": "Smell You Don't."
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "t:labels.subheading",
+      "default": "Premium smell-proof storage with collector-grade comic art. Lock in the freshness — flex the artwork."
+    },
+    {
+      "type": "header",
+      "content": "t:general.collections"
+    },
+    {
+      "type": "collection",
+      "id": "collection_1",
+      "label": "t:labels.collection_1"
+    },
+    {
+      "type": "collection",
+      "id": "collection_2",
+      "label": "t:labels.collection_2"
+    },
+    {
+      "type": "collection",
+      "id": "collection_3",
+      "label": "t:labels.collection_3"
+    },
+    {
+      "type": "header",
+      "content": "t:general.navigation"
+    },
+    {
+      "type": "text",
+      "id": "cta_primary_text",
+      "label": "t:labels.cta_primary_text",
+      "default": "Shop all bags"
+    },
+    {
+      "type": "url",
+      "id": "cta_primary_url",
+      "label": "t:labels.cta_primary_url"
+    },
+    {
+      "type": "text",
+      "id": "cta_secondary_text",
+      "label": "t:labels.cta_secondary_text",
+      "default": "Explore bundles"
+    },
+    {
+      "type": "url",
+      "id": "cta_secondary_url",
+      "label": "t:labels.cta_secondary_url"
+    },
+    {
+      "type": "text",
+      "id": "trust_line",
+      "label": "t:labels.trust_line",
+      "default": "4.9 · 300+ collectors · Ships discreetly"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.hero"
+    }
+  ]
+}
+{% endschema %}

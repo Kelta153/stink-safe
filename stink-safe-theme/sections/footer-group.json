@@ -1,0 +1,20 @@
+{
+  "type": "footer",
+  "name": "t:general.footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "tagline": "Premium smell-proof storage — collectible art, built to last.",
+        "shop_heading": "Shop",
+        "help_heading": "Help",
+        "company_heading": "Company",
+        "show_payment_icons": true,
+        "legal_text": "For storage of legal goods only. Sold for lawful use in accordance with local law."
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

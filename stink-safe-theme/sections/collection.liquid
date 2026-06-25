@@ -1,0 +1,241 @@
+{%- liquid
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+-%}
+
+<div class="coll-pg">
+
+  <div class="coll-pg__head">
+    <p class="coll-pg__eyebrow label">{{- 'collections.eyebrow' | t -}}</p>
+    <h1 class="coll-pg__title">{{- collection.title -}}</h1>
+    {%- if collection.description != blank -%}
+      <p class="coll-pg__desc">{{- collection.description -}}</p>
+    {%- endif -%}
+  </div>
+
+  <div class="coll-pg__bar">
+    <p class="coll-pg__count">{{ collection.products_count }} {{ 'collections.products' | t }}</p>
+    <div class="coll-pg__sort-wrap">
+      <select class="coll-pg__sort" onchange="window.location.href = this.value" aria-label="{{ 'collections.sort_by' | t }}">
+        {%- for opt in collection.sort_options -%}
+          <option value="{{ collection.url }}?sort_by={{ opt.value }}"{% if opt.value == sort_by %} selected{% endif %}>
+            {{- opt.name -}}
+          </option>
+        {%- endfor -%}
+      </select>
+    </div>
+  </div>
+
+  {%- if collection.all_tags.size > 0 -%}
+    <div class="coll-pg__tags" role="list" aria-label="{{ 'collections.filter_by_tag' | t }}">
+      <a href="{{ collection.url }}" class="coll-pg__tag{% unless current_tags %} coll-pg__tag--on{% endunless %}" role="listitem">
+        {{- 'collections.all_tags' | t -}}
+      </a>
+      {%- for tag in collection.all_tags -%}
+        {%- unless tag contains '_' -%}
+          <a
+            href="{{ collection.url }}/{{ tag | handle }}"
+            class="coll-pg__tag{% if current_tags contains tag %} coll-pg__tag--on{% endif %}"
+            role="listitem"
+          >
+            {{- tag -}}
+          </a>
+        {%- endunless -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  {%- paginate collection.products by 24 -%}
+    {%- if collection.products.size > 0 -%}
+      <div class="coll-pg__grid">
+        {%- for product in collection.products -%}
+          {%- render 'product-card', product: product -%}
+        {%- endfor -%}
+      </div>
+      {%- if paginate.pages > 1 -%}
+        <nav class="coll-pg__nav" aria-label="{{ 'general.pagination' | t }}">
+          {{- paginate | default_pagination -}}
+        </nav>
+      {%- endif -%}
+    {%- else -%}
+      <p class="coll-pg__empty">{{- 'collections.empty' | t -}}</p>
+    {%- endif -%}
+  {%- endpaginate -%}
+
+</div>
+
+{% stylesheet %}
+  .coll-pg {
+    padding-bottom: 48px;
+  }
+
+  /* Head */
+  .coll-pg__head {
+    padding: 20px var(--page-gutter) 16px;
+    border-bottom: 1px solid var(--color-hairline);
+  }
+  .coll-pg__eyebrow {
+    font-size: 10px;
+    color: var(--color-ink-faint);
+    margin: 0 0 6px;
+  }
+  .coll-pg__title {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    margin: 0;
+  }
+  .coll-pg__desc {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--color-ink-faint);
+    margin: 8px 0 0;
+  }
+
+  /* Toolbar */
+  .coll-pg__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px var(--page-gutter) 0;
+  }
+  .coll-pg__count {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-ink-faint);
+    margin: 0;
+  }
+  .coll-pg__sort {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-ink);
+    border: 1.5px solid var(--color-hairline);
+    border-radius: 8px;
+    padding: 7px 28px 7px 10px;
+    background: var(--color-white);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230B1220' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+  }
+
+  /* Tag filter chips */
+  .coll-pg__tags {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 12px var(--page-gutter);
+    scrollbar-width: none;
+  }
+  .coll-pg__tags::-webkit-scrollbar { display: none; }
+  .coll-pg__tag {
+    flex: 0 0 auto;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-ink-faint);
+    background: var(--color-mist);
+    border: 1.5px solid transparent;
+    border-radius: var(--radius-pill);
+    padding: 6px 14px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .coll-pg__tag--on {
+    color: var(--color-blue);
+    border-color: var(--color-blue);
+    background: var(--color-mist);
+  }
+
+  /* Product grid */
+  .coll-pg__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 0 var(--page-gutter);
+  }
+  @media (min-width: 640px) {
+    .coll-pg__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .coll-pg__grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+  }
+
+  /* Pagination */
+  .coll-pg__nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 28px var(--page-gutter) 0;
+  }
+  .coll-pg__nav .pagination {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .coll-pg__nav a,
+  .coll-pg__nav span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-ink);
+    border: 1.5px solid var(--color-hairline);
+    border-radius: 8px;
+    padding: 0 10px;
+    text-decoration: none;
+  }
+  .coll-pg__nav .current,
+  .coll-pg__nav [aria-current] {
+    background: var(--color-ink);
+    color: var(--color-white);
+    border-color: var(--color-ink);
+  }
+  .coll-pg__nav a:hover {
+    border-color: var(--color-blue);
+    color: var(--color-blue);
+  }
+
+  /* Empty state */
+  .coll-pg__empty {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--color-ink-faint);
+    text-align: center;
+    padding: 48px var(--page-gutter);
+    margin: 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.collection",
+  "settings": [],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

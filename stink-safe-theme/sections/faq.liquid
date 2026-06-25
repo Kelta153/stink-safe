@@ -1,0 +1,250 @@
+<div class="faq-pg">
+  <header class="faq-pg__head">
+    <p class="label faq-pg__eyebrow">{{ 'sections.faq.eyebrow' | t }}</p>
+    <h1 class="faq-pg__heading">{{ section.settings.heading | default: 'FAQ' }}</h1>
+    {%- if section.settings.subheading != blank -%}
+      <p class="faq-pg__subheading">{{ section.settings.subheading }}</p>
+    {%- endif -%}
+  </header>
+
+  <div class="faq-pg__list">
+    {%- if section.blocks.size > 0 -%}
+      {% content_for 'blocks' %}
+    {%- else -%}
+      <details class="faq-item">
+        <summary class="faq-item__summary">
+          <span class="faq-item__question">{{ 'sections.faq.placeholder_q1' | t }}</span>
+          <span class="faq-item__icon" aria-hidden="true">
+            <svg class="faq-item__icon-plus" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+            </svg>
+            <svg class="faq-item__icon-minus" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 10h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-item__answer">
+          <p>{{ 'sections.faq.placeholder_a1' | t }}</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-item__summary">
+          <span class="faq-item__question">{{ 'sections.faq.placeholder_q2' | t }}</span>
+          <span class="faq-item__icon" aria-hidden="true">
+            <svg class="faq-item__icon-plus" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+            </svg>
+            <svg class="faq-item__icon-minus" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 10h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-item__answer">
+          <p>{{ 'sections.faq.placeholder_a2' | t }}</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-item__summary">
+          <span class="faq-item__question">{{ 'sections.faq.placeholder_q3' | t }}</span>
+          <span class="faq-item__icon" aria-hidden="true">
+            <svg class="faq-item__icon-plus" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+            </svg>
+            <svg class="faq-item__icon-minus" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 10h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-item__answer">
+          <p>{{ 'sections.faq.placeholder_a3' | t }}</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-item__summary">
+          <span class="faq-item__question">{{ 'sections.faq.placeholder_q4' | t }}</span>
+          <span class="faq-item__icon" aria-hidden="true">
+            <svg class="faq-item__icon-plus" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+            </svg>
+            <svg class="faq-item__icon-minus" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 10h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-item__answer">
+          <p>{{ 'sections.faq.placeholder_a4' | t }}</p>
+        </div>
+      </details>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .faq-pg {
+    padding-block: 64px;
+    max-width: 720px;
+    margin-inline: auto;
+  }
+
+  .faq-pg__head {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .faq-pg__eyebrow {
+    display: inline-block;
+    color: var(--color-blue);
+    font-family: var(--font-label);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .faq-pg__heading {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    color: var(--color-ink);
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+
+  .faq-pg__subheading {
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    color: var(--color-ink-faint);
+    line-height: 1.6;
+    max-width: 520px;
+    margin-inline: auto;
+  }
+
+  .faq-pg__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-top: 1px solid var(--color-hairline);
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--color-hairline);
+  }
+
+  .faq-item__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 0;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .faq-item__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item__question {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    line-height: 1.4;
+    flex: 1;
+    transition: color 0.15s ease;
+  }
+
+  .faq-item[open] .faq-item__question {
+    color: var(--color-blue);
+  }
+
+  .faq-item__icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-pill);
+    background: var(--color-mist);
+    color: var(--color-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease, transform 0.2s ease;
+  }
+
+  .faq-item[open] .faq-item__icon {
+    background: var(--color-blue);
+    color: var(--color-white);
+  }
+
+  .faq-item__icon-minus {
+    display: none;
+  }
+
+  .faq-item[open] .faq-item__icon-plus {
+    display: none;
+  }
+
+  .faq-item[open] .faq-item__icon-minus {
+    display: block;
+  }
+
+  .faq-item__answer {
+    padding-bottom: 22px;
+    padding-right: 48px;
+  }
+
+  .faq-item__answer p {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    color: var(--color-slate);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  @media (max-width: 639px) {
+    .faq-pg {
+      padding-block: 40px;
+    }
+
+    .faq-pg__head {
+      margin-bottom: 32px;
+    }
+
+    .faq-item__answer {
+      padding-right: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.faq",
+  "blocks": [{ "type": "@theme" }],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Questions & answers"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "t:labels.subheading"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.faq"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

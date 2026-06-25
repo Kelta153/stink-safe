@@ -1,0 +1,45 @@
+{% doc %}
+  Outputs Stink Safe design tokens as CSS custom properties, inlined in <head>.
+  Brand tokens are hardcoded here; merchant-editable values come from settings.
+{% enddoc %}
+
+{% style %}
+  :root {
+    /* Brand colours — locked design tokens */
+    --color-blue:          #2463EB;
+    --color-blue-pressed:  #1D4ED8;
+    --color-ink:           #0B1220;
+    --color-slate:         #56607A;
+    --color-mist:          #EEF3FF;
+    --color-sun:           #FFC23C;
+    --color-alert:         #E0472C;
+    --color-in-stock:      #16A34A;
+    --color-hairline:      #E7EAF3;
+    --color-white:         #FFFFFF;
+    --color-ink-subtle:    #AEB8D0;
+    --color-ink-faint:     #7B8496;
+
+    /* Collection accents */
+    --color-crimewave:     #F4A300;
+    --color-horror:        #7C3AED;
+    --color-snackverse:    #EC4899;
+    --color-strains:       #0D9488;
+    --color-horror-hotbox: #991B1B;
+
+    /* Typography families */
+    --font-display:        'Plus Jakarta Sans', sans-serif;
+    --font-body:           'Inter', sans-serif;
+    --font-label:          'JetBrains Mono', monospace;
+
+    /* critical.css compatibility aliases */
+    --font-primary--family: 'Inter', sans-serif;
+    --color-background:     {{ settings.background_color | default: '#FFFFFF' }};
+    --color-foreground:     {{ settings.foreground_color | default: '#0B1220' }};
+    --style-border-radius-inputs: {{ settings.input_corner_radius | default: 8 }}px;
+
+    /* Layout — merchant-editable */
+    --page-width:  {{ settings.max_page_width | default: '90rem' }};
+    --page-margin: {{ settings.min_page_margin | default: 16 }}px;
+    --page-gutter: 16px;
+  }
+{% endstyle %}

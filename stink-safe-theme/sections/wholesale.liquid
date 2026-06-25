@@ -1,0 +1,466 @@
+{%- liquid
+  assign heading = section.settings.heading | default: 'wholesale.heading'
+  assign subheading = section.settings.subheading | default: 'wholesale.subheading'
+-%}
+
+<div class="wholesale-pg">
+
+  {%- comment -%} ── Page head ──────────────────────────────────────────── {%- endcomment -%}
+  <div class="wholesale-pg__head">
+    <span class="wholesale-pg__eyebrow mono">{{ 'wholesale.eyebrow' | t }}</span>
+    <h1 class="wholesale-pg__h1">
+      {%- if section.settings.heading != blank -%}
+        {{- section.settings.heading | escape -}}
+      {%- else -%}
+        {{- 'wholesale.heading' | t -}}
+      {%- endif -%}
+    </h1>
+    <p class="wholesale-pg__sub">
+      {%- if section.settings.subheading != blank -%}
+        {{- section.settings.subheading | escape -}}
+      {%- else -%}
+        {{- 'wholesale.subheading' | t -}}
+      {%- endif -%}
+    </p>
+  </div>
+
+  {%- comment -%} ── Stats strip ────────────────────────────────────────── {%- endcomment -%}
+  <div class="wholesale-pg__stats" role="list">
+
+    <div class="wholesale-pg__stat" role="listitem">
+      <span class="wholesale-pg__stat-number" aria-hidden="true">10+</span>
+      <span class="wholesale-pg__stat-label">{{ 'wholesale.moq_label' | t }}</span>
+      <span class="wholesale-pg__stat-sub">{{ 'wholesale.moq' | t }}</span>
+    </div>
+
+    <div class="wholesale-pg__stat" role="listitem">
+      <span class="wholesale-pg__stat-number" aria-hidden="true">25+</span>
+      <span class="wholesale-pg__stat-label">{{ 'wholesale.moq_reorder_label' | t }}</span>
+      <span class="wholesale-pg__stat-sub">{{ 'wholesale.moq_reorder' | t }}</span>
+    </div>
+
+    <div class="wholesale-pg__stat" role="listitem">
+      <span class="wholesale-pg__stat-number" aria-hidden="true">3–5</span>
+      <span class="wholesale-pg__stat-label">{{ 'wholesale.lead_time_label' | t }}</span>
+      <span class="wholesale-pg__stat-sub">{{ 'wholesale.lead_time' | t }}</span>
+    </div>
+
+  </div>
+
+  {%- comment -%} ── Enquiry form ────────────────────────────────────────── {%- endcomment -%}
+  <div class="wholesale-pg__form-wrap">
+
+    <h2 class="wholesale-pg__form-heading">{{ 'wholesale.form_heading' | t }}</h2>
+
+    {%- form 'contact', id: 'wholesale-contact-form' -%}
+
+      {%- if form.posted_successfully? -%}
+        <div class="wholesale-pg__success" role="status" aria-live="polite">
+          <svg class="wholesale-pg__success-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="10" cy="10" r="8.5"/>
+            <path d="m6.5 10 2.5 2.5 4.5-4.5"/>
+          </svg>
+          <div>
+            <strong>{{ 'wholesale.success_heading' | t }}</strong>
+            <p>{{ 'wholesale.success_body' | t }}</p>
+          </div>
+        </div>
+
+      {%- else -%}
+
+        {%- if form.errors -%}
+          <div class="wholesale-pg__errors" role="alert">
+            {{- form.errors | default_errors -}}
+          </div>
+        {%- endif -%}
+
+        <input type="hidden" name="contact[tags]" value="wholesale-enquiry">
+
+        <div class="wholesale-pg__fields">
+
+          <div class="wholesale-pg__field">
+            <label class="wholesale-pg__label" for="wholesale-name">
+              {{- 'wholesale.field_name' | t -}}<span aria-hidden="true"> *</span>
+            </label>
+            <input
+              class="wholesale-pg__input"
+              type="text"
+              id="wholesale-name"
+              name="contact[name]"
+              autocomplete="name"
+              required
+              value="{{ form.name | escape }}"
+            >
+          </div>
+
+          <div class="wholesale-pg__field">
+            <label class="wholesale-pg__label" for="wholesale-business">
+              {{- 'wholesale.field_business' | t -}}<span aria-hidden="true"> *</span>
+            </label>
+            <input
+              class="wholesale-pg__input"
+              type="text"
+              id="wholesale-business"
+              name="contact[business_name]"
+              autocomplete="organization"
+              required
+              value="{{ form.body | remove: 'business_name:' | strip | escape }}"
+            >
+          </div>
+
+          <div class="wholesale-pg__field">
+            <label class="wholesale-pg__label" for="wholesale-email">
+              {{- 'wholesale.field_email' | t -}}<span aria-hidden="true"> *</span>
+            </label>
+            <input
+              class="wholesale-pg__input"
+              type="email"
+              id="wholesale-email"
+              name="contact[email]"
+              autocomplete="email"
+              required
+              value="{{ form.email | escape }}"
+            >
+          </div>
+
+          <div class="wholesale-pg__field">
+            <label class="wholesale-pg__label" for="wholesale-phone">
+              {{- 'wholesale.field_phone' | t -}}
+              <span class="wholesale-pg__optional mono">{{ 'wholesale.optional' | t }}</span>
+            </label>
+            <input
+              class="wholesale-pg__input"
+              type="tel"
+              id="wholesale-phone"
+              name="contact[phone]"
+              autocomplete="tel"
+              value="{{ form.body | escape }}"
+            >
+          </div>
+
+          <div class="wholesale-pg__field">
+            <label class="wholesale-pg__label" for="wholesale-quantity">
+              {{- 'wholesale.field_quantity' | t -}}
+              <span class="wholesale-pg__optional mono">{{ 'wholesale.optional' | t }}</span>
+            </label>
+            <input
+              class="wholesale-pg__input"
+              type="text"
+              id="wholesale-quantity"
+              name="contact[quantity_estimate]"
+              placeholder="{{ 'wholesale.field_quantity_placeholder' | t }}"
+            >
+          </div>
+
+          <div class="wholesale-pg__field wholesale-pg__field--full">
+            <label class="wholesale-pg__label" for="wholesale-message">
+              {{- 'wholesale.field_message' | t -}}
+              <span class="wholesale-pg__optional mono">{{ 'wholesale.optional' | t }}</span>
+            </label>
+            <textarea
+              class="wholesale-pg__input wholesale-pg__textarea"
+              id="wholesale-message"
+              name="contact[body]"
+              rows="4"
+              placeholder="{{ 'wholesale.field_message_placeholder' | t }}"
+            >{{ form.body | escape }}</textarea>
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn btn--primary wholesale-pg__submit">
+          {{- 'wholesale.enquire' | t -}}
+        </button>
+
+      {%- endif -%}
+
+    {%- endform -%}
+
+  </div>
+
+</div>
+
+{% stylesheet %}
+  .wholesale-pg {
+    padding: 40px 0 64px;
+  }
+
+  /* ── Head ──────────────────────────────────────────────────────────────── */
+  .wholesale-pg__head {
+    margin-bottom: 32px;
+  }
+
+  .wholesale-pg__eyebrow {
+    display: inline-block;
+    font-family: var(--font-label);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-blue);
+    background: var(--color-mist);
+    border-radius: var(--radius-pill);
+    padding: 4px 10px;
+    margin-bottom: 14px;
+  }
+
+  .wholesale-pg__h1 {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 6vw, 42px);
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--color-ink);
+    margin: 0 0 12px;
+    letter-spacing: -0.02em;
+  }
+
+  .wholesale-pg__sub {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--color-slate);
+    margin: 0;
+    max-width: 540px;
+  }
+
+  /* ── Stats strip ───────────────────────────────────────────────────────── */
+  .wholesale-pg__stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  .wholesale-pg__stat {
+    background: var(--color-mist);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-card-inner);
+    padding: 18px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .wholesale-pg__stat-number {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--color-blue);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .wholesale-pg__stat-label {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-ink);
+    margin-top: 4px;
+  }
+
+  .wholesale-pg__stat-sub {
+    font-family: var(--font-label);
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--color-ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 2px;
+  }
+
+  @media (max-width: 480px) {
+    .wholesale-pg__stats {
+      grid-template-columns: 1fr;
+    }
+
+    .wholesale-pg__stat {
+      flex-direction: row;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .wholesale-pg__stat-number {
+      font-size: 24px;
+      flex: 0 0 auto;
+    }
+  }
+
+  /* ── Form wrap ─────────────────────────────────────────────────────────── */
+  .wholesale-pg__form-wrap {
+    background: var(--color-white);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: 28px 24px 32px;
+  }
+
+  .wholesale-pg__form-heading {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-ink);
+    margin: 0 0 22px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ── Fields grid ───────────────────────────────────────────────────────── */
+  .wholesale-pg__fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 14px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 560px) {
+    .wholesale-pg__fields {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .wholesale-pg__field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .wholesale-pg__field--full {
+    grid-column: 1 / -1;
+  }
+
+  .wholesale-pg__label {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-ink);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .wholesale-pg__optional {
+    font-family: var(--font-label);
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--color-ink-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .wholesale-pg__input {
+    width: 100%;
+    border: 1.5px solid var(--color-hairline);
+    border-radius: var(--radius-card-inner);
+    padding: 10px 12px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--color-ink);
+    background: var(--color-white);
+    outline: none;
+    transition: border-color 0.15s ease;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .wholesale-pg__input::placeholder {
+    color: var(--color-ink-subtle);
+  }
+
+  .wholesale-pg__input:focus {
+    border-color: var(--color-blue);
+    box-shadow: 0 0 0 3px rgba(36, 99, 235, 0.12);
+  }
+
+  .wholesale-pg__textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  /* ── Submit ────────────────────────────────────────────────────────────── */
+  .wholesale-pg__submit {
+    width: 100%;
+    justify-content: center;
+    font-size: 14px;
+    padding: 14px 20px;
+  }
+
+  /* ── Success state ─────────────────────────────────────────────────────── */
+  .wholesale-pg__success {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: #f0fdf4;
+    border: 1.5px solid #bbf7d0;
+    border-radius: var(--radius-card-inner);
+    padding: 18px 16px;
+    color: var(--color-ink);
+  }
+
+  .wholesale-pg__success-icon {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    color: var(--color-in-stock);
+    margin-top: 2px;
+  }
+
+  .wholesale-pg__success strong {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-ink);
+    margin-bottom: 2px;
+  }
+
+  .wholesale-pg__success p {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--color-slate);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* ── Error banner ──────────────────────────────────────────────────────── */
+  .wholesale-pg__errors {
+    background: #fff5f5;
+    border: 1.5px solid #fecaca;
+    border-radius: var(--radius-card-inner);
+    padding: 12px 14px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--color-alert);
+    margin-bottom: 16px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.wholesale",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Wholesale & trade"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "t:labels.subheading",
+      "default": "Stock Stink Safe in your store. Flexible minimum orders, fast turnaround, and full wholesale pricing."
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "presets": [
+    {
+      "name": "t:general.wholesale"
+    }
+  ]
+}
+{% endschema %}

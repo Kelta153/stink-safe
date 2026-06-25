@@ -1,0 +1,228 @@
+{
+  "404": {
+    "title": "404",
+    "not_found": "Page not found.",
+    "back_to_shopping": "Back to shopping"
+  },
+  "blog": {
+    "article_comments": "Comments",
+    "article_metadata_html": "{{ date }} by {{ author }}",
+    "comment_form_body": "Comment",
+    "comment_form_email": "Email",
+    "comment_form_name": "Name",
+    "comment_form_submit": "Post",
+    "comment_form_title": "Add a comment"
+  },
+  "cart": {
+    "checkout": "Checkout",
+    "title": "Your cart",
+    "update": "Update",
+    "remove": "Remove",
+    "empty": "Your cart is empty",
+    "empty_cta": "Shop all bags",
+    "continue_shopping": "Continue shopping",
+    "free_shipping_progress": "Add {{ amount }} more for free shipping",
+    "free_shipping_reached": "You've unlocked free shipping",
+    "subtotal": "Subtotal",
+    "discreet_note": "Ships in plain, unmarked packaging",
+    "quantity": "Quantity",
+    "decrease_quantity": "Decrease quantity",
+    "increase_quantity": "Increase quantity",
+    "remove_item": "Remove {{ title }}"
+  },
+  "customers": {
+    "login": {
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "title": "Login"
+    }
+  },
+  "collections": {
+    "title": "Collections",
+    "issue_range": "Issue {{ range }}",
+    "all_tags": "All",
+    "empty": "No products found.",
+    "products": "products",
+    "eyebrow": "Collection",
+    "sort_by": "Sort by",
+    "filter_by_tag": "Filter by tag"
+  },
+  "gift_card": {
+    "add_to_apple_wallet": "Add to Apple Wallet",
+    "card": "Gift card",
+    "expired": "This gift card has expired",
+    "expires_on": "Expires on {{ expires_on }}",
+    "use_at_checkout": "Use this gift card at checkout"
+  },
+  "password": {
+    "title": "This shop is private",
+    "password": "Password",
+    "enter": "Enter"
+  },
+  "products": {
+    "add_to_cart": "Add to cart",
+    "sold_out": "Sold out",
+    "notify_me": "Notify me",
+    "quick_add": "Quick add",
+    "added": "Added",
+    "in_stock": "In stock",
+    "last_few": "Last few",
+    "designs_count": "{{ count }} collectible designs",
+    "discreet_shipping": "Ships in plain, unmarked packaging",
+    "save_percent": "Save {{ percent }}%",
+    "quantity": {
+      "label": "Quantity",
+      "increase": "Increase quantity",
+      "decrease": "Decrease quantity"
+    },
+    "rating": {
+      "aria": "Rated {{ score }} out of 5"
+    },
+    "gallery": {
+      "thumbnails": "Product images",
+      "view_image": "View image {{ index }}"
+    },
+    "save": "Save",
+    "volume_pricing": {
+      "title": "Volume pricing",
+      "qty": "Qty",
+      "unit_price": "Per unit",
+      "save": "Save",
+      "save_pct": "Save {{ percent }}%"
+    },
+    "spec": {
+      "smell": {
+        "title": "Smell-proof barrier",
+        "body": "Triple-layer activated carbon lining independently tested to block 99.9% of odour. Airtight press-seal closure keeps smells locked in and freshness locked out."
+      },
+      "dimensions": {
+        "title": "Dimensions & capacity",
+        "body": "19 × 12 cm when sealed. Fits up to 3.5 g comfortably with room for accessories. Tear-resistant and water-resistant outer shell."
+      },
+      "shipping": {
+        "title": "Shipping & returns",
+        "body": "Free UK shipping on orders over £25. Plain, unmarked packaging — no logos, no labels. Delivered in 2–4 working days. 30-day returns on unopened items."
+      },
+      "smell_detail": "Triple-layer activated-carbon lining, independently lab-tested to block 99.9% of odour molecules.",
+      "dimensions_detail": "Heavy-gauge Mylar® with reclosable press-seal. Available in 3.5g, 7g, and 14g sizes.",
+      "shipping_detail": "Ships in plain, unmarked packaging. Free delivery over £25. Delivered in 2–4 working days."
+    }
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search bags, collections…",
+    "submit": "Search",
+    "no_results_html": "No results for {{ terms }}",
+    "results_for_html": "{{ count }} results for {{ terms }}"
+  },
+  "sections": {
+    "bundles": {
+      "save_badge": "Save up to 40%"
+    },
+    "faq": {
+      "eyebrow": "Support",
+      "placeholder_q1": "Are the bags really smell-proof?",
+      "placeholder_a1": "Yes. Every Stink Safe bag uses a triple-layer odour barrier — an activated-carbon inner lining sandwiched between two heat-sealed, food-grade PE layers. The combination blocks volatile organic compounds at the molecular level, keeping smells locked in (or out) for the life of the bag.",
+      "placeholder_q2": "What sizes are available?",
+      "placeholder_a2": "Stink Safe bags come in three sizes: Small (10 × 7 cm) for single-use portions or pocket carry, Medium (15 × 10 cm) for standard herb storage, and Large (20 × 14 cm) for bulk storage or multiple items. All sizes feature the same triple-layer construction and press-seal closure.",
+      "placeholder_q3": "How many designs are in each pack?",
+      "placeholder_a3": "Each pack contains 6 unique collectible designs, chosen at random from the active collection drop. Because designs are randomised, every pack is a surprise — and trading duplicates with mates is half the fun. Check the individual collection pages to see which designs are currently in rotation.",
+      "placeholder_q4": "Do you ship discreetly?",
+      "placeholder_a4": "Absolutely. All orders are shipped in plain, unmarked packaging with no branding or product description on the outside. The sender name on the label is a neutral holding name, so there is nothing to give away what's inside."
+    },
+    "discreet": {
+      "feature_1_title": "Triple-layer odour barrier",
+      "feature_1_sub": "Independently smell-tested.",
+      "feature_2_title": "Built for what's next",
+      "feature_2_sub": "Jars, cases & more coming soon.",
+      "feature_3_title": "Resealable & reusable",
+      "feature_3_sub": "Press-seal closure, built to last."
+    }
+  },
+  "about": {
+    "title": "Our story",
+    "eyebrow": "Our story",
+    "heading_default": "Art you love. Smell you don't.",
+    "body_default": "We started Stink Safe because we couldn't find storage that took the art seriously. Everything on the market was either clinical or embarrassing — child-proof packaging with zero personality. We're a small London-based team of collectors who wanted something different: smell-proof bags that you'd actually want to be seen with. So we commissioned original artwork from independent artists, built a triple-layer odour barrier, and had it independently tested. That's it. No shortcuts.",
+    "value_1_title": "Independent brand",
+    "value_1_sub": "London-based, building something different",
+    "value_2_title": "Collector-grade art",
+    "value_2_sub": "Every design is original commissioned artwork",
+    "value_3_title": "Smell-proof, seriously",
+    "value_3_sub": "Independently lab-tested triple-layer barrier",
+    "cta": "Shop all bags"
+  },
+  "general": {
+    "free_shipping_threshold": "Free shipping over £25",
+    "pagination": "Pagination",
+    "accessibility": {
+      "skip_content": "Skip to content",
+      "close": "Close",
+      "open_menu": "Open menu",
+      "close_menu": "Close menu",
+      "main_nav": "Main navigation"
+    },
+    "drop_list": {
+      "heading": "Get first access to new drops",
+      "subheading": "New drops, exclusive deals — no spam.",
+      "email_placeholder": "Your email address",
+      "submit": "Join the list",
+      "submit_short": "Join",
+      "success": "You're on the list — watch your inbox."
+    },
+    "trust": {
+      "odour_resistant": "Odour resistant",
+      "odour_resistant_sub": "Triple-layer barrier",
+      "built_to_last": "Built to last",
+      "built_to_last_sub": "Tear & water resistant",
+      "travel_ready": "Travel ready",
+      "travel_ready_sub": "Pocket-sized, resealable",
+      "collectible": "Collectible designs",
+      "collectible_sub": "6 in every pack"
+    }
+  },
+  "footer": {
+    "all_rights": "All rights reserved.",
+    "payment_methods": "Accepted payment methods"
+  },
+  "faq": {
+    "title": "Questions & answers"
+  },
+  "bundles": {
+    "title": "Bundle packs",
+    "hero_label": "Best value",
+    "included": "What's included"
+  },
+  "wholesale": {
+    "heading": "Wholesale & trade",
+    "subheading": "Stock Stink Safe in your store. Flexible minimum orders, fast turnaround, and full wholesale pricing.",
+    "eyebrow": "Trade & B2B",
+    "enquire": "Make an enquiry",
+    "moq": "Min. first order: 10 packs",
+    "moq_label": "Min. first order",
+    "moq_reorder": "Reorder from: 25 packs",
+    "moq_reorder_label": "Reorder minimum",
+    "lead_time": "Lead time: 3–5 working days",
+    "lead_time_label": "Working days",
+    "form_heading": "Get in touch",
+    "field_name": "Name",
+    "field_business": "Business name",
+    "field_email": "Email",
+    "field_phone": "Phone",
+    "field_quantity": "Estimated quantity",
+    "field_quantity_placeholder": "e.g. 50 packs per month",
+    "field_message": "Message",
+    "field_message_placeholder": "Tell us about your store and what you’re looking for…",
+    "optional": "Optional",
+    "success_heading": "Enquiry received — thanks!",
+    "success_body": "We’ll be in touch within one business day with pricing and next steps.",
+    "name": "Your name",
+    "business": "Business name",
+    "email": "Email address",
+    "phone": "Phone (optional)",
+    "qty_estimate": "Estimated monthly order",
+    "message": "Tell us about your business",
+    "success": "Thanks — we’ll be in touch within 1 business day."
+  }
+}

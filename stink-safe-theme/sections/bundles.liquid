@@ -1,0 +1,343 @@
+<div class="bundles-pg">
+
+  {%- comment -%} ── Hero card ── {%- endcomment -%}
+  <div class="bundles-hero">
+    <div class="bundles-hero__dots" aria-hidden="true"></div>
+
+    <div class="bundles-hero__body">
+      <div class="bundles-hero__meta">
+        <span class="bundles-hero__eyebrow mono label">{{ section.settings.eyebrow | default: 'Set No. 01' }}</span>
+        <span class="bundles-hero__badge">{{ 'sections.bundles.save_badge' | t }}</span>
+      </div>
+
+      <h1 class="bundles-hero__title">
+        {{- section.settings.title | default: "Collector's Crate" -}}
+      </h1>
+
+      {%- if section.settings.description != blank -%}
+        <p class="bundles-hero__desc">{{ section.settings.description }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.cta_url != blank -%}
+        <a href="{{ section.settings.cta_url }}" class="bundles-hero__cta btn">
+          {{- section.settings.cta_text | default: 'Add to bag' -}}
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="bundles-hero__media">
+      {%- if section.settings.image != blank -%}
+        {{- section.settings.image | image_url: width: 640 | image_tag: class: 'bundles-hero__img', loading: 'eager', alt: section.settings.title -}}
+      {%- else -%}
+        <div class="bundles-hero__placeholder" aria-hidden="true">
+          <canvas class="bundles-hero__canvas" width="300" height="320"></canvas>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- comment -%} ── Tier blocks ── {%- endcomment -%}
+  <div class="bundles-pg__tiers">
+    {% content_for 'blocks' %}
+  </div>
+
+</div>
+
+{% stylesheet %}
+  /* ── Page wrapper ── */
+  .bundles-pg {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding-block: 48px;
+  }
+
+  /* ── Hero card ── */
+  .bundles-hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    background-color: var(--color-ink, #0B1220);
+    border-radius: 20px;
+    padding: 32px 24px;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  @media (min-width: 768px) {
+    .bundles-hero {
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      padding: 48px 48px 48px 48px;
+      gap: 48px;
+    }
+  }
+
+  /* Halftone dot layer */
+  .bundles-hero__dots {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.14) 1px, transparent 1px);
+    background-size: 18px 18px;
+    background-position: center center;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .bundles-hero:hover .bundles-hero__dots {
+      transform: scale(1.04) translateZ(0);
+      transition: transform 1.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .bundles-hero__dots {
+      transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+  }
+
+  .bundles-hero__body {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .bundles-hero__meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .bundles-hero__eyebrow {
+    color: rgba(255,255,255,0.55);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+
+  .bundles-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--color-sun, #FFC23C);
+    color: var(--color-ink, #0B1220);
+    font-family: var(--font-label, 'JetBrains Mono', monospace);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: var(--radius-pill, 999px);
+    white-space: nowrap;
+  }
+
+  .bundles-hero__title {
+    font-family: var(--font-display, 'Plus Jakarta Sans', sans-serif);
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  .bundles-hero__desc {
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.65);
+    margin: 0;
+    max-width: 42ch;
+  }
+
+  .bundles-hero__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #ffffff;
+    color: var(--color-ink, #0B1220);
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    padding: 14px 24px;
+    border-radius: var(--radius-btn, 12px);
+    text-decoration: none;
+    align-self: flex-start;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.18s ease, transform 0.18s ease;
+  }
+
+  .bundles-hero__cta:hover {
+    background-color: var(--color-mist, #EEF3FF);
+  }
+
+  .bundles-hero__cta:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .bundles-hero__cta:active {
+      transform: scale(0.97);
+    }
+  }
+
+  /* Hero media */
+  .bundles-hero__media {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bundles-hero__img {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    border-radius: var(--radius-card, 16px);
+    object-fit: cover;
+    display: block;
+  }
+
+  @media (min-width: 768px) {
+    .bundles-hero__img {
+      width: 280px;
+      height: 320px;
+      object-fit: cover;
+    }
+  }
+
+  /* Canvas placeholder */
+  .bundles-hero__placeholder {
+    width: 100%;
+    max-width: 280px;
+    border-radius: var(--radius-card, 16px);
+    overflow: hidden;
+    background: rgba(255,255,255,0.05);
+  }
+
+  .bundles-hero__canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ── Tiers wrapper ── */
+  .bundles-pg__tiers {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  @media (min-width: 640px) {
+    .bundles-pg__tiers {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    /* Placeholder canvas — drawn once, no animation */
+    var canvases = document.querySelectorAll('.bundles-hero__canvas');
+    canvases.forEach(function (canvas) {
+      var ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      var w = canvas.width;
+      var h = canvas.height;
+
+      /* Gradient background */
+      var grad = ctx.createLinearGradient(0, 0, w, h);
+      grad.addColorStop(0, '#1a2540');
+      grad.addColorStop(1, '#0d1829');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
+
+      /* Subtle grid lines */
+      ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+      ctx.lineWidth = 1;
+      for (var x = 0; x < w; x += 24) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+      for (var y = 0; y < h; y += 24) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+
+      /* Central bag silhouette shape */
+      ctx.fillStyle = 'rgba(36,99,235,0.18)';
+      ctx.beginPath();
+      ctx.roundRect(w * 0.25, h * 0.2, w * 0.5, h * 0.55, 12);
+      ctx.fill();
+
+      /* Logo-area dot */
+      ctx.fillStyle = 'rgba(36,99,235,0.55)';
+      ctx.beginPath();
+      ctx.arc(w * 0.5, h * 0.47, 20, 0, Math.PI * 2);
+      ctx.fill();
+
+      /* Text hint */
+      ctx.fillStyle = 'rgba(255,255,255,0.3)';
+      ctx.font = '500 11px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Image', w * 0.5, h * 0.82);
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:general.bundles",
+  "blocks": [{ "type": "@theme" }],
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "Set No. 01"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:labels.title",
+      "default": "Collector's Crate"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "t:labels.description",
+      "default": "Everything you need, nothing you don't. Each pack is smell-proof, TSA-friendly, and built to last."
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "t:labels.cta_url"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "t:labels.cta_text",
+      "default": "Add to bag"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "presets": [
+    {
+      "name": "t:general.bundles"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,321 @@
+/* ============================================================
+   Stink Safe — base.css
+   Design token library. All CSS custom properties are defined
+   here. Loaded on every page via layout/theme.liquid.
+   ============================================================ */
+
+:root {
+  /* ----------------------------------------------------------
+     Brand colours
+     ---------------------------------------------------------- */
+  --color-blue:          #2463EB;
+  --color-blue-pressed:  #1D4ED8;
+  --color-ink:           #0B1220;
+  --color-slate:         #56607A;
+  --color-mist:          #EEF3FF;
+  --color-sun:           #FFC23C;
+  --color-alert:         #E0472C;
+  --color-in-stock:      #16A34A;
+  --color-hairline:      #E7EAF3;
+  --color-white:         #FFFFFF;
+
+  /* Sub-tones */
+  --color-ink-subtle:    #AEB8D0;  /* footer body text */
+  --color-ink-faint:     #7B8496;  /* captions, meta */
+  --color-ink-dim:       #56607A;  /* body copy on light bg */
+  --color-surface-dark:  #11182B;  /* icon bg inside dark footer */
+  --color-border-dark:   #1B2336;  /* footer rule */
+
+  /* ----------------------------------------------------------
+     Collection accent colours
+     ---------------------------------------------------------- */
+  --color-crimewave:     #F4A300;
+  --color-horror:        #7C3AED;
+  --color-snackverse:    #EC4899;
+  --color-strains:       #0D9488;
+  --color-horror-hotbox: #991B1B;
+
+  /* ----------------------------------------------------------
+     Typography
+     ---------------------------------------------------------- */
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body:    'Inter', sans-serif;
+  --font-label:   'JetBrains Mono', monospace;
+
+  --fw-regular:   400;
+  --fw-medium:    500;
+  --fw-semibold:  600;
+  --fw-bold:      700;
+  --fw-extrabold: 800;
+
+  /* ----------------------------------------------------------
+     Card & component system
+     ---------------------------------------------------------- */
+  --radius-card:   16px;
+  --radius-card-inner: 10px;
+  --radius-btn:    12px;
+  --radius-pill:   999px;
+  --radius-badge:  6px;
+  --radius-icon:   9px;
+  --radius-tile:   14px;
+
+  --shadow-card:   0 6px 20px rgba(11, 18, 32, 0.06);
+  --shadow-btn:    0 8px 18px rgba(36, 99, 235, 0.28);
+
+  /* ----------------------------------------------------------
+     Spacing scale (4-point grid)
+     ---------------------------------------------------------- */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ----------------------------------------------------------
+     Announcement bar
+     ---------------------------------------------------------- */
+  --announcement-bg:   var(--color-ink);
+  --announcement-text: var(--color-ink-subtle);
+
+  /* ----------------------------------------------------------
+     Pricing placeholders
+     Until the real pricing sheet arrives these values are used
+     in Liquid to render consistent placeholder copy.
+     ---------------------------------------------------------- */
+  --price-single:      "£12";
+  --price-tier-6:      "£12";
+  --price-tier-25:     "£10";
+  --price-tier-50:     "£9";
+  --price-tier-100:    "£8";
+  --price-tier-200:    "£7";
+  --price-crate-from:  "£42";
+  --price-horror-from: "£22";
+  --price-stack-from:  "£20";
+  --bundle-save-max:   "40%";
+  --free-ship:         "£25";
+}
+
+/* ============================================================
+   Global element styles that follow from the token system
+   ============================================================ */
+
+body {
+  font-family: var(--font-body);
+  color:       var(--color-ink);
+  background:  var(--color-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Display headings */
+h1, h2, h3, .display {
+  font-family: var(--font-display);
+  font-weight: var(--fw-extrabold);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+/* Mono labels — issue numbers, category tags, drop badges */
+.label,
+.mono {
+  font-family: var(--font-label);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   Utility classes
+   ============================================================ */
+
+/* Colour utilities */
+.text-blue    { color: var(--color-blue); }
+.text-ink     { color: var(--color-ink); }
+.text-slate   { color: var(--color-slate); }
+.text-sun     { color: var(--color-sun); }
+.text-alert   { color: var(--color-alert); }
+.bg-mist      { background-color: var(--color-mist); }
+.bg-ink       { background-color: var(--color-ink); }
+.bg-blue      { background-color: var(--color-blue); }
+
+/* Collection accent utilities */
+.accent-crimewave  { --accent: var(--color-crimewave); }
+.accent-horror     { --accent: var(--color-horror); }
+.accent-snackverse { --accent: var(--color-snackverse); }
+.accent-strains    { --accent: var(--color-strains); }
+
+/* Button base */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: var(--fw-bold);
+  font-size: 14px;
+  line-height: 1;
+  padding: 14px 20px;
+  border-radius: var(--radius-btn);
+  transition: background 120ms ease, transform 80ms ease;
+  text-decoration: none;
+}
+
+.btn:active { transform: scale(0.97); }
+
+.btn--primary {
+  background:  var(--color-blue);
+  color:       var(--color-white);
+  box-shadow:  var(--shadow-btn);
+}
+.btn--primary:hover { background: var(--color-blue-pressed); }
+
+.btn--secondary {
+  background: var(--color-white);
+  color:      var(--color-blue);
+  border:     1.5px solid var(--color-blue);
+  box-shadow: none;
+}
+
+.btn--ghost {
+  background: var(--color-white);
+  color:      var(--color-ink);
+  border:     1px solid var(--color-hairline);
+}
+
+.btn--dark {
+  background: var(--color-white);
+  color:      var(--color-ink);
+}
+
+/* Status pills */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: 8px;
+  font-weight: var(--fw-bold);
+  padding: 3px 5px;
+  border-radius: 10px;
+  border: 1px solid currentColor;
+}
+
+.pill--in-stock  { color: var(--color-in-stock); }
+.pill--last-few  { color: var(--color-alert); }
+.pill--sold-out  { color: var(--color-slate); }
+
+/* Collection badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: 9px;
+  font-weight: var(--fw-bold);
+  padding: 3px 6px;
+  border-radius: var(--radius-badge);
+  background: var(--accent, var(--color-blue));
+  color: var(--color-white);
+}
+
+/* Product card */
+.card {
+  background:    var(--color-white);
+  border:        1px solid var(--color-hairline);
+  border-radius: var(--radius-card);
+  box-shadow:    var(--shadow-card);
+  padding:       var(--space-2);
+  position:      relative;
+  box-sizing:    border-box;
+}
+
+.card__art {
+  border-radius: var(--radius-card-inner);
+  overflow: hidden;
+  position: relative;
+  margin-bottom: var(--space-2);
+}
+
+/* Dotted halftone texture (used on dark panels and hero bg) */
+.halftone {
+  background-image: radial-gradient(rgba(255,255,255,.06) 1.4px, transparent 1.6px);
+  background-size: 13px 13px;
+}
+
+.halftone--light {
+  background-image: radial-gradient(rgba(36,99,235,.10) 1.4px, transparent 1.6px);
+  background-size: 14px 14px;
+}
+
+/* Icon container */
+.icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-icon);
+  background: var(--color-mist);
+  flex: 0 0 auto;
+}
+
+/* Horizontal scroll row */
+.scroll-row {
+  display: flex;
+  gap: var(--space-3);
+  overflow-x: auto;
+  padding-bottom: var(--space-2);
+  scrollbar-width: none;
+}
+.scroll-row::-webkit-scrollbar { display: none; }
+
+/* Page gutter */
+.gutter {
+  padding-left:  var(--page-gutter);
+  padding-right: var(--page-gutter);
+}
+
+/* Section header row */
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.section-header__title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: var(--fw-extrabold);
+  color: var(--color-ink);
+}
+
+.section-header__link {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: var(--fw-bold);
+  color: var(--color-blue);
+  text-decoration: none;
+}
+
+/* ============================================================
+   Mobile-first media queries
+   Base: 390px (design target)
+   ============================================================ */
+
+@media (min-width: 640px) {
+  :root { --page-gutter: 24px; }
+}
+
+@media (min-width: 768px) {
+  :root { --page-gutter: 32px; }
+}
+
+@media (min-width: 1024px) {
+  :root { --page-gutter: 48px; }
+  body { -webkit-font-smoothing: antialiased; }
+}

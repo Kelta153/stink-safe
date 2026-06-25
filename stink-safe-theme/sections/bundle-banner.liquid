@@ -1,0 +1,210 @@
+{%- liquid
+  assign cta_url = section.settings.cta_url | default: '/pages/bundles'
+-%}
+
+<div class="bundle-banner">
+  <div class="bundle-banner__card">
+    <div class="bundle-banner__dots" aria-hidden="true"></div>
+    <div class="bundle-banner__inner">
+
+      <div class="bundle-banner__top">
+        <span class="bundle-banner__label">
+          {{- section.settings.label | default: 'Set No. 01 — Best value' | escape -}}
+        </span>
+        {%- if section.settings.badge != blank -%}
+          <span class="bundle-banner__badge">
+            {{- section.settings.badge | default: 'Save up to 40%' | escape -}}
+          </span>
+        {%- endif -%}
+      </div>
+
+      <div class="bundle-banner__img-wrap">
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 700 | image_tag: loading: 'lazy', alt: section.settings.title }}
+        {%- else -%}
+          <div class="bundle-banner__img-placeholder">
+            <span>All 4 packs · stacked</span>
+          </div>
+        {%- endif -%}
+      </div>
+
+      <p class="bundle-banner__title">
+        {{- section.settings.title | default: "Collector's Crate" | escape -}}
+      </p>
+
+      {%- if section.settings.description != blank -%}
+        <p class="bundle-banner__desc">{{- section.settings.description | escape -}}</p>
+      {%- endif -%}
+
+      <a href="{{ cta_url }}" class="bundle-banner__cta">
+        {{- section.settings.cta_text | default: 'Shop the set' | escape -}}
+      </a>
+
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .bundle-banner {
+    padding: 12px 0 6px;
+  }
+  .bundle-banner__card {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-ink);
+    border-radius: 20px;
+    padding: 18px;
+    color: var(--color-white);
+  }
+  .bundle-banner__dots {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1.4px, transparent 1.6px);
+    background-size: 13px 13px;
+    pointer-events: none;
+  }
+  .bundle-banner__inner {
+    position: relative;
+  }
+  .bundle-banner__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+  .bundle-banner__label {
+    font-family: var(--font-label);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--color-ink-subtle);
+    text-transform: uppercase;
+    flex: 1;
+    padding-right: 8px;
+  }
+  .bundle-banner__badge {
+    flex: 0 0 auto;
+    background: var(--color-sun);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: 800;
+    padding: 5px 8px;
+    border-radius: 999px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .bundle-banner__img-wrap {
+    border-radius: 12px;
+    overflow: hidden;
+    height: 104px;
+  }
+  .bundle-banner__img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .bundle-banner__img-placeholder {
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(135deg, #7AA2FF26, #7AA2FF26 7px, #7AA2FF0d 7px, #7AA2FF0d 14px);
+    border: 1px dashed #7AA2FF70;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .bundle-banner__img-placeholder span {
+    font-family: var(--font-label);
+    font-size: 9px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #7AA2FF;
+    opacity: 0.9;
+  }
+  .bundle-banner__title {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--color-white);
+    margin: 14px 0 0;
+  }
+  .bundle-banner__desc {
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--color-ink-subtle);
+    margin: 6px 0 12px;
+  }
+  .bundle-banner__cta {
+    display: block;
+    width: 100%;
+    background: var(--color-white);
+    color: var(--color-ink);
+    border: none;
+    border-radius: 11px;
+    padding: 13px;
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    line-height: 1;
+    box-sizing: border-box;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.bundle_banner",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "t:labels.eyebrow_label",
+      "default": "Set No. 01 — Best value"
+    },
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "t:labels.badge_text",
+      "default": "Save up to 40%"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "Collector's Crate"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "t:labels.description",
+      "default": "All four collections — Cartoon Crimewave, Snackverse, Horror Highs & Horror Hotbox."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "t:labels.cta_text",
+      "default": "Shop the set"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "t:labels.cta_url"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.bundle_banner"
+    }
+  ]
+}
+{% endschema %}

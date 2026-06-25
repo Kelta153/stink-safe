@@ -1,0 +1,389 @@
+{%- liquid
+  assign story_body = section.settings.body
+  if story_body == blank
+    assign story_body = page.content
+  endif
+  if story_body == blank
+    assign story_body = 'about.body_default' | t
+  endif
+
+  assign display_heading = section.settings.heading
+  if display_heading == blank
+    assign display_heading = 'about.heading_default' | t
+  endif
+-%}
+
+<div class="about-pg">
+
+  <div class="about-pg__banner">
+    <div class="about-pg__banner-dots" aria-hidden="true"></div>
+
+    <p class="about-pg__eyebrow label">{{ 'about.eyebrow' | t }}</p>
+
+    <h1 class="about-pg__heading">{{- display_heading | escape -}}</h1>
+
+    {%- if section.settings.image != blank -%}
+      <div class="about-pg__image-wrap">
+        {{- section.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', class: 'about-pg__image', alt: section.settings.image.alt | escape -}}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="about-pg__body">
+    {{ story_body }}
+  </div>
+
+  <div class="about-pg__values" aria-label="{{ 'about.eyebrow' | t }}">
+
+    <div class="about-pg__value">
+      <span class="about-pg__value-icon" aria-hidden="true">
+        <canvas class="about-pg__icon-canvas" data-icon="brand" width="40" height="40"></canvas>
+      </span>
+      <div class="about-pg__value-text">
+        <p class="about-pg__value-title">{{ 'about.value_1_title' | t }}</p>
+        <p class="about-pg__value-sub">{{ 'about.value_1_sub' | t }}</p>
+      </div>
+    </div>
+
+    <div class="about-pg__value">
+      <span class="about-pg__value-icon" aria-hidden="true">
+        <canvas class="about-pg__icon-canvas" data-icon="art" width="40" height="40"></canvas>
+      </span>
+      <div class="about-pg__value-text">
+        <p class="about-pg__value-title">{{ 'about.value_2_title' | t }}</p>
+        <p class="about-pg__value-sub">{{ 'about.value_2_sub' | t }}</p>
+      </div>
+    </div>
+
+    <div class="about-pg__value">
+      <span class="about-pg__value-icon" aria-hidden="true">
+        <canvas class="about-pg__icon-canvas" data-icon="shield" width="40" height="40"></canvas>
+      </span>
+      <div class="about-pg__value-text">
+        <p class="about-pg__value-title">{{ 'about.value_3_title' | t }}</p>
+        <p class="about-pg__value-sub">{{ 'about.value_3_sub' | t }}</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="about-pg__cta-wrap">
+    <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary about-pg__cta">
+      {{- 'about.cta' | t -}}
+    </a>
+  </div>
+
+</div>
+
+{% stylesheet %}
+  /* ─── Outer container ──────────────────────────────────────── */
+  .about-pg {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding-bottom: 40px;
+  }
+
+  /* ─── Story banner (the aesthetic risk: ink-dark comic panel) ── */
+  .about-pg__banner {
+    position: relative;
+    background: var(--color-ink);
+    border-radius: var(--radius-card);
+    padding: 28px 22px 32px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  .about-pg__banner-dots {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1.4px, transparent 1.6px);
+    background-size: 13px 13px;
+    pointer-events: none;
+  }
+
+  .about-pg__eyebrow {
+    position: relative;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--color-sun);
+    margin: 0 0 14px;
+    display: block;
+  }
+
+  .about-pg__heading {
+    position: relative;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 32px;
+    line-height: 1.06;
+    letter-spacing: -0.025em;
+    color: var(--color-white);
+    margin: 0;
+  }
+
+  /* Image below heading — full-width inside the banner */
+  .about-pg__image-wrap {
+    position: relative;
+    margin-top: 22px;
+    border-radius: var(--radius-card-inner);
+    overflow: hidden;
+  }
+
+  .about-pg__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  /* ─── Body copy ─────────────────────────────────────────────── */
+  .about-pg__body {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--color-slate);
+    margin: 0 0 28px;
+  }
+
+  .about-pg__body p {
+    margin: 0 0 1em;
+  }
+
+  .about-pg__body p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ─── Values strip ──────────────────────────────────────────── */
+  .about-pg__values {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .about-pg__value {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: var(--color-white);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-tile);
+    padding: 14px;
+    box-shadow: var(--shadow-card);
+  }
+
+  .about-pg__value-icon {
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-icon);
+    background: #FFF8E6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .about-pg__icon-canvas {
+    width: 40px;
+    height: 40px;
+    display: block;
+  }
+
+  .about-pg__value-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .about-pg__value-title {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-ink);
+    margin: 0 0 3px;
+    line-height: 1.2;
+  }
+
+  .about-pg__value-sub {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--color-ink-faint);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* ─── CTA ───────────────────────────────────────────────────── */
+  .about-pg__cta-wrap {
+    display: flex;
+    justify-content: center;
+  }
+
+  .about-pg__cta {
+    width: 100%;
+    max-width: 320px;
+    justify-content: center;
+  }
+
+  /* ─── Wider viewports ───────────────────────────────────────── */
+  @media (min-width: 640px) {
+    .about-pg__heading {
+      font-size: 42px;
+    }
+
+    .about-pg__banner {
+      padding: 36px 30px 40px;
+    }
+
+    .about-pg__values {
+      flex-direction: row;
+      gap: 12px;
+    }
+
+    .about-pg__value {
+      flex: 1;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .about-pg__heading {
+      font-size: 52px;
+    }
+  }
+
+  /* ─── Reduced motion ────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .about-pg__value {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    function drawIcon(canvas, type) {
+      var ctx = canvas.getContext('2d');
+      var w = canvas.width;
+      var h = canvas.height;
+      var cx = w / 2;
+      var cy = h / 2;
+
+      // Sun yellow fill for icon bg is set via CSS; canvas is transparent
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = '#B45309'; // amber-700 — warm, not the cold blue used on product cards
+      ctx.lineWidth = 2.2;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      if (type === 'brand') {
+        // Map pin / location marker — "London-based"
+        ctx.beginPath();
+        ctx.arc(cx, cy - 4, 7, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(cx, cy + 3);
+        ctx.lineTo(cx, cy + 10);
+        ctx.stroke();
+
+        // inner dot
+        ctx.beginPath();
+        ctx.arc(cx, cy - 4, 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = '#B45309';
+        ctx.fill();
+
+      } else if (type === 'art') {
+        // Simple comic/panel frame with a star inside
+        var pad = 6;
+        ctx.strokeRect(pad, pad, w - pad * 2, h - pad * 2);
+
+        // Star
+        var r1 = 6;
+        var r2 = 3;
+        var points = 5;
+        ctx.beginPath();
+        for (var i = 0; i < points * 2; i++) {
+          var angle = (i * Math.PI) / points - Math.PI / 2;
+          var r = i % 2 === 0 ? r1 : r2;
+          var x = cx + Math.cos(angle) * r;
+          var y = cy + Math.sin(angle) * r;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.stroke();
+
+      } else if (type === 'shield') {
+        // Shield — lab-tested triple-layer
+        ctx.beginPath();
+        ctx.moveTo(cx, 6);
+        ctx.lineTo(cx + 9, 10);
+        ctx.lineTo(cx + 9, 18);
+        ctx.quadraticCurveTo(cx + 9, 25, cx, 28);
+        ctx.quadraticCurveTo(cx - 9, 25, cx - 9, 18);
+        ctx.lineTo(cx - 9, 10);
+        ctx.closePath();
+        ctx.stroke();
+
+        // Check mark
+        ctx.beginPath();
+        ctx.moveTo(cx - 4, cy + 1);
+        ctx.lineTo(cx - 1, cy + 4);
+        ctx.lineTo(cx + 5, cy - 3);
+        ctx.stroke();
+      }
+    }
+
+    function init() {
+      var canvases = document.querySelectorAll('.about-pg__icon-canvas');
+      canvases.forEach(function (canvas) {
+        var type = canvas.getAttribute('data-icon');
+        drawIcon(canvas, type);
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:general.about",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Art you love. Smell you don't."
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "t:labels.description"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "presets": [
+    {
+      "name": "t:general.about"
+    }
+  ]
+}
+{% endschema %}

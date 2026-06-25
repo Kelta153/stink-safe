@@ -1,0 +1,191 @@
+<div class="drop-list">
+  <div class="drop-list__card">
+    <span class="drop-list__smiley" aria-hidden="true">☻</span>
+
+    <h2 class="drop-list__heading">
+      {{- section.settings.heading | default: 'Join the drop list' | escape -}}
+    </h2>
+    <p class="drop-list__sub">
+      {{- section.settings.subheading | default: 'First dibs on every drop, plus 10% off your first order.' | escape -}}
+    </p>
+
+    {%- form 'customer' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter,drop-list">
+      <div class="drop-list__row">
+        <input
+          class="drop-list__input"
+          type="email"
+          name="contact[email]"
+          placeholder="{{ 'general.drop_list.email_placeholder' | t }}"
+          required
+          autocomplete="email"
+        >
+        <button class="drop-list__join" type="submit">
+          {{- 'general.drop_list.submit_short' | t -}}
+        </button>
+      </div>
+      {%- if form.posted_successfully? -%}
+        <p class="drop-list__success" role="status">{{- 'general.drop_list.success' | t -}}</p>
+      {%- elsif form.errors -%}
+        <p class="drop-list__error" role="alert">{{- form.errors | default_errors -}}</p>
+      {%- endif -%}
+    {%- endform -%}
+
+    {%- if section.settings.telegram_url != blank -%}
+      <a href="{{ section.settings.telegram_url }}" class="drop-list__telegram" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m22 3-9.5 9.5"/>
+          <path d="M22 3 15 21l-3.5-7.5L4 10z"/>
+        </svg>
+        {{- section.settings.telegram_cta | default: 'Or get drops on Telegram' | escape -}}
+      </a>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .drop-list {
+    padding: 14px 0 24px;
+  }
+  .drop-list__card {
+    background: var(--color-mist);
+    border-radius: 16px;
+    padding: 16px;
+    position: relative;
+  }
+  .drop-list__smiley {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    font: 600 20px/1 var(--font-body);
+    color: #29791E;
+    pointer-events: none;
+    user-select: none;
+  }
+  .drop-list__heading {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--color-ink);
+    margin: 0;
+    padding-right: 28px;
+  }
+  .drop-list__sub {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.45;
+    color: var(--color-slate);
+    margin: 6px 0 12px;
+  }
+  .drop-list__row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .drop-list__input {
+    flex: 1;
+    border: 1px solid #d8def0;
+    border-radius: 10px;
+    padding: 11px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--color-ink);
+    background: var(--color-white);
+    outline: none;
+    min-width: 0;
+  }
+  .drop-list__input::placeholder {
+    color: #9AA1AE;
+  }
+  .drop-list__input:focus {
+    border-color: var(--color-blue);
+  }
+  .drop-list__join {
+    background: var(--color-blue);
+    color: var(--color-white);
+    border: none;
+    border-radius: 10px;
+    padding: 0 16px;
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    line-height: 1;
+  }
+  .drop-list__success {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-in-stock);
+    margin: 6px 0 0;
+  }
+  .drop-list__error {
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: var(--color-alert);
+    margin: 6px 0 0;
+  }
+  .drop-list__telegram {
+    width: 100%;
+    background: var(--color-white);
+    color: var(--color-blue);
+    border: 1.5px solid var(--color-blue);
+    border-radius: 10px;
+    padding: 11px;
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    text-decoration: none;
+    box-sizing: border-box;
+  }
+  .drop-list__telegram svg {
+    width: 16px;
+    height: 16px;
+    flex: 0 0 auto;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.drop_list",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Join the drop list"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "t:labels.subheading",
+      "default": "First dibs on every drop, plus 10% off your first order."
+    },
+    {
+      "type": "text",
+      "id": "telegram_cta",
+      "label": "t:labels.telegram_cta",
+      "default": "Or get drops on Telegram"
+    },
+    {
+      "type": "url",
+      "id": "telegram_url",
+      "label": "t:labels.telegram_url_capture"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.drop_list"
+    }
+  ]
+}
+{% endschema %}

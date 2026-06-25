@@ -1,0 +1,76 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow_label": "Drop No. 001 — Limited Series",
+        "headline_line1": "Art You Love.",
+        "headline_line2": "Smell You Don't.",
+        "subheading": "Premium smell-proof storage with collector-grade comic art. Lock in the freshness — flex the artwork.",
+        "cta_primary_text": "Shop all bags",
+        "cta_secondary_text": "Explore bundles",
+        "trust_line": "4.9 · 300+ collectors · Ships discreetly"
+      }
+    },
+    "trust-strip": {
+      "type": "trust-strip",
+      "settings": {}
+    },
+    "collection-list": {
+      "type": "collection-list",
+      "settings": {
+        "heading": "Shop by collection",
+        "see_all_text": "See all"
+      }
+    },
+    "featured-products": {
+      "type": "featured-products",
+      "settings": {
+        "heading": "Featured packs",
+        "see_all_text": "Shop all"
+      }
+    },
+    "bundle-banner": {
+      "type": "bundle-banner",
+      "settings": {
+        "label": "Set No. 01 — Best value",
+        "badge": "Save up to 40%",
+        "title": "Collector's Crate",
+        "description": "All four collections — Cartoon Crimewave, Snackverse, Horror Highs & Horror Hotbox.",
+        "cta_text": "Shop the set"
+      }
+    },
+    "social-proof": {
+      "type": "social-proof",
+      "settings": {
+        "rating_summary": "4.9 from 300+ verified reviews",
+        "review_text": "Genuinely the only smell-proof bag I'd leave out on a shelf. The art's unreal and the seal actually works.",
+        "reviewer_name": "Maya R. · Verified buyer"
+      }
+    },
+    "discreet-by-design": {
+      "type": "discreet-by-design",
+      "settings": {
+        "heading": "Discreet by design"
+      }
+    },
+    "drop-list": {
+      "type": "drop-list",
+      "settings": {
+        "heading": "Join the drop list",
+        "subheading": "First dibs on every drop, plus 10% off your first order.",
+        "telegram_cta": "Or get drops on Telegram"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "trust-strip",
+    "collection-list",
+    "featured-products",
+    "bundle-banner",
+    "social-proof",
+    "discreet-by-design",
+    "drop-list"
+  ]
+}

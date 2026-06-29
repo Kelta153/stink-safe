@@ -273,25 +273,41 @@
             <thead>
               <tr>
                 <th scope="col">{{ 'products.volume_pricing.qty' | t }}</th>
-                <th scope="col">{{ 'products.volume_pricing.unit_price' | t }}</th>
+                <th scope="col">{{ 'products.volume_pricing.price' | t }}</th>
+                <th scope="col">{{ 'products.volume_pricing.per_bag' | t }}</th>
                 <th scope="col">{{ 'products.volume_pricing.save' | t }}</th>
               </tr>
             </thead>
-            <tbody id="pdp-vol-body">
+            <tbody>
               <tr>
-                <td>1</td>
-                <td id="pdp-vol-price-1">{{ current_variant.price | money_without_trailing_zeros }}</td>
+                <td>6</td>
+                <td>£4.99</td>
+                <td>£0.83</td>
                 <td>—</td>
               </tr>
               <tr>
-                <td>3+</td>
-                <td id="pdp-vol-price-3">—</td>
-                <td class="pdp__vol-save">{{ 'products.volume_pricing.save_pct' | t: percent: 10 }}</td>
+                <td>25</td>
+                <td>£6.99</td>
+                <td>£0.28</td>
+                <td class="pdp__vol-save">{{ 'products.volume_pricing.save_pct' | t: percent: 66 }}</td>
               </tr>
               <tr>
-                <td>6+</td>
-                <td id="pdp-vol-price-6">—</td>
-                <td class="pdp__vol-save">{{ 'products.volume_pricing.save_pct' | t: percent: 17 }}</td>
+                <td>50</td>
+                <td>£9.99</td>
+                <td>£0.20</td>
+                <td class="pdp__vol-save">{{ 'products.volume_pricing.save_pct' | t: percent: 76 }}</td>
+              </tr>
+              <tr>
+                <td>100</td>
+                <td>£13.99</td>
+                <td>£0.14</td>
+                <td class="pdp__vol-save">{{ 'products.volume_pricing.save_pct' | t: percent: 83 }}</td>
+              </tr>
+              <tr>
+                <td>200</td>
+                <td>£22.99</td>
+                <td>£0.11</td>
+                <td class="pdp__vol-save">{{ 'products.volume_pricing.save_pct' | t: percent: 86 }}</td>
               </tr>
             </tbody>
           </table>
@@ -815,16 +831,17 @@
   }
 
   .pdp__vol-table th {
-    padding: 8px 14px;
+    padding: 8px 10px;
     text-align: left;
     font-weight: 600;
     color: var(--color-slate);
     background: var(--color-mist);
     border-bottom: 1px solid var(--color-hairline);
+    white-space: nowrap;
   }
 
   .pdp__vol-table td {
-    padding: 9px 14px;
+    padding: 9px 10px;
     color: var(--color-ink);
     border-bottom: 1px solid var(--color-hairline);
   }

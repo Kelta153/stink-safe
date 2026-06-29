@@ -87,7 +87,8 @@
     "volume_pricing": {
       "title": "Volume pricing",
       "qty": "Qty",
-      "unit_price": "Per unit",
+      "price": "Price",
+      "per_bag": "Per bag",
       "save": "Save",
       "save_pct": "Save {{ percent }}%"
     },

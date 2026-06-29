@@ -19,7 +19,7 @@
     "update": "Update",
     "remove": "Remove",
     "empty": "Your cart is empty",
-    "empty_cta": "Shop all bags",
+    "empty_cta": "Shop all",
     "continue_shopping": "Continue shopping",
     "free_shipping_progress": "Add {{ amount }} more for free shipping",
     "free_shipping_reached": "You've unlocked free shipping",
@@ -81,7 +81,15 @@
     },
     "gallery": {
       "thumbnails": "Product images",
-      "view_image": "View image {{ index }}"
+      "view_image": "View image {{ index }}",
+      "zoom_hint": "Hover to zoom"
+    },
+    "proof": {
+      "aria": "Product features",
+      "odour_barrier": "Triple-layer odour barrier",
+      "airtight_seal": "Airtight press-seal closure",
+      "plain_parcels": "Plain, unbranded parcels",
+      "durable": "Tear and water resistant"
     },
     "save": "Save",
     "volume_pricing": {
@@ -121,6 +129,39 @@
     "bundles": {
       "save_badge": "Save up to 40%"
     },
+    "lifestyle": {
+      "heading": "Built for real life",
+      "item_1_title": "Goes anywhere",
+      "item_1_sub": "Cabin bag, glovebox, festival kit.",
+      "item_2_title": "Kitchen & pantry",
+      "item_2_sub": "Keep strong smells contained.",
+      "item_3_title": "Gym & gear",
+      "item_3_sub": "Sweaty kit stays separate."
+    },
+    "accessories_teaser": {
+      "eyebrow": "Coming soon",
+      "heading": "Accessories",
+      "body": "Jars, cases & activated-charcoal inserts — landing soon. Be first to know.",
+      "notify_me": "Notify me",
+      "email_placeholder": "Email address",
+      "success": "You're on the list."
+    },
+    "brand_story": {
+      "eyebrow": "Our story",
+      "heading": "Storage you'll actually want to show off.",
+      "body": "Odour-control storage always looked like an afterthought. We put collectible comic art on a properly engineered, odour-resistant pack — useful, discreet and genuinely nice to own.",
+      "cta": "Read our story"
+    },
+    "trust_band": {
+      "plain_parcels": "Plain, unbranded parcels",
+      "free_shipping": "Free UK shipping over £25",
+      "easy_returns": "Easy returns",
+      "secure_checkout": "Secure checkout"
+    },
+    "social_proof": {
+      "heading": "#StinkSafe in the wild",
+      "follow_label": "Follow @stinksafe →"
+    },
     "faq": {
       "eyebrow": "Support",
       "placeholder_q1": "Are the bags really smell-proof?",
@@ -157,12 +198,22 @@
   "general": {
     "free_shipping_threshold": "Free shipping over £25",
     "pagination": "Pagination",
+    "shop_all": "Shop all",
+    "by_collection": "By collection",
+    "bundles_label": "Bundles",
+    "accessories_label": "Accessories — coming soon",
+    "coming_soon": "Coming soon",
+    "best_value": "Best value",
+    "mega_promo_title": "Collector's Crate",
+    "mega_promo_sub": "All four collections, from £6.99.",
+    "mega_promo_cta": "Shop the set →",
     "accessibility": {
       "skip_content": "Skip to content",
       "close": "Close",
       "open_menu": "Open menu",
       "close_menu": "Close menu",
-      "main_nav": "Main navigation"
+      "main_nav": "Main navigation",
+      "shop_menu": "Shop navigation"
     },
     "drop_list": {
       "heading": "Get first access to new drops",
@@ -185,7 +236,14 @@
   },
   "footer": {
     "all_rights": "All rights reserved.",
-    "payment_methods": "Accepted payment methods"
+    "payment_methods": "Accepted payment methods",
+    "drop_heading": "Get the next drop",
+    "drop_sub": "New drops, restocks, the occasional deal. No spam.",
+    "join_telegram": "Join us on Telegram for drop alerts",
+    "join": "Join",
+    "privacy": "Privacy",
+    "cookies": "Cookies",
+    "terms": "Terms"
   },
   "faq": {
     "title": "Questions & answers"

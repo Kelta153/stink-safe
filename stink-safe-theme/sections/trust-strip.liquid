@@ -1,28 +1,32 @@
 <div class="trust-strip">
-  <div class="trust-strip__grid">
+  <div class="trust-strip__inner">
 
-    <div class="trust-strip__card">
+    <div class="trust-strip__item">
       <span class="trust-strip__icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="#2463EB" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 3 5 6v6c0 4.2 3 6.9 7 8 4-1.1 7-3.8 7-8V6z"/>
         </svg>
       </span>
-      <p class="trust-strip__title">{{ 'general.trust.odour_resistant' | t }}</p>
-      <p class="trust-strip__sub">{{ 'general.trust.odour_resistant_sub' | t }}</p>
+      <div>
+        <p class="trust-strip__title">{{ 'general.trust.odour_resistant' | t }}</p>
+        <p class="trust-strip__sub">{{ 'general.trust.odour_resistant_sub' | t }}</p>
+      </div>
     </div>
 
-    <div class="trust-strip__card">
+    <div class="trust-strip__item">
       <span class="trust-strip__icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="#2463EB" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 3 5 6v6c0 4.2 3 6.9 7 8 4-1.1 7-3.8 7-8V6z"/>
           <path d="m9 12 2 2 4-4"/>
         </svg>
       </span>
-      <p class="trust-strip__title">{{ 'general.trust.built_to_last' | t }}</p>
-      <p class="trust-strip__sub">{{ 'general.trust.built_to_last_sub' | t }}</p>
+      <div>
+        <p class="trust-strip__title">{{ 'general.trust.built_to_last' | t }}</p>
+        <p class="trust-strip__sub">{{ 'general.trust.built_to_last_sub' | t }}</p>
+      </div>
     </div>
 
-    <div class="trust-strip__card">
+    <div class="trust-strip__item">
       <span class="trust-strip__icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="#2463EB" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="8" width="18" height="12" rx="2"/>
@@ -30,19 +34,23 @@
           <path d="M3 13h18"/>
         </svg>
       </span>
-      <p class="trust-strip__title">{{ 'general.trust.travel_ready' | t }}</p>
-      <p class="trust-strip__sub">{{ 'general.trust.travel_ready_sub' | t }}</p>
+      <div>
+        <p class="trust-strip__title">{{ 'general.trust.travel_ready' | t }}</p>
+        <p class="trust-strip__sub">{{ 'general.trust.travel_ready_sub' | t }}</p>
+      </div>
     </div>
 
-    <div class="trust-strip__card">
+    <div class="trust-strip__item">
       <span class="trust-strip__icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="#2463EB" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 3 3 8l9 5 9-5z"/>
           <path d="m3 13 9 5 9-5"/>
         </svg>
       </span>
-      <p class="trust-strip__title">{{ 'general.trust.collectible' | t }}</p>
-      <p class="trust-strip__sub">{{ 'general.trust.collectible_sub' | t }}</p>
+      <div>
+        <p class="trust-strip__title">{{ 'general.trust.collectible' | t }}</p>
+        <p class="trust-strip__sub">{{ 'general.trust.collectible_sub' | t }}</p>
+      </div>
     </div>
 
   </div>
@@ -50,39 +58,49 @@
 
 {% stylesheet %}
   .trust-strip {
-    padding: 20px 0 6px;
+    padding: 20px 0 8px;
   }
-  .trust-strip__grid {
+
+  .trust-strip__inner {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 12px;
   }
-  .trust-strip__card {
+
+  .trust-strip__item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
     border: 1px solid var(--color-hairline);
     border-radius: 14px;
     padding: 13px;
   }
+
   .trust-strip__icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 9px;
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
     background: var(--color-mist);
     display: flex;
     align-items: center;
     justify-content: center;
+    flex: 0 0 auto;
   }
+
   .trust-strip__icon svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
   }
+
   .trust-strip__title {
-    font-family: var(--font-body);
+    font-family: var(--font-display);
     font-size: 13px;
-    font-weight: 700;
-    line-height: 1.1;
+    font-weight: 800;
+    line-height: 1.2;
     color: var(--color-ink);
-    margin: 9px 0 0;
+    margin: 0;
   }
+
   .trust-strip__sub {
     font-family: var(--font-body);
     font-size: 11px;
@@ -90,6 +108,47 @@
     line-height: 1.35;
     color: var(--color-ink-faint);
     margin: 3px 0 0;
+  }
+
+  @media (min-width: 768px) {
+    .trust-strip {
+      padding: 0;
+    }
+
+    .trust-strip__inner {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 44px 40px;
+    }
+
+    .trust-strip__item {
+      border: none;
+      border-radius: 0;
+      padding: 0;
+      gap: 14px;
+    }
+
+    .trust-strip__icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 13px;
+    }
+
+    .trust-strip__icon svg {
+      width: 23px;
+      height: 23px;
+    }
+
+    .trust-strip__title {
+      font-size: 16px;
+    }
+
+    .trust-strip__sub {
+      font-size: 13px;
+      color: #7B8496;
+    }
   }
 {% endstylesheet %}
 

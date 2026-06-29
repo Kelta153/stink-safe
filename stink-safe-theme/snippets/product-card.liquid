@@ -1,8 +1,8 @@
 {% doc %}
-  Renders a product card with art placeholder, collection badge, status, rating, and price.
+  Renders a product card with art image, collection badge, availability status, and price.
 
   @param {product} product - The product to display
-  @param {string} [accent] - Hex accent colour for art placeholder (auto-detected from product tags if omitted)
+  @param {string} [accent] - Hex accent colour (auto-detected from product tags if omitted)
   @param {string} [badge_text] - Collection badge label (defaults to product type)
 
   @example
@@ -28,21 +28,21 @@
   endunless
 
   if product.available
-    assign status_text = 'In stock'
+    assign status_text = 'products.in_stock' | t
     assign status_color = '#16A34A'
   else
-    assign status_text = 'Sold out'
+    assign status_text = 'products.sold_out' | t
     assign status_color = '#E0472C'
   endif
 -%}
 
-<a href="{{ product.url }}" class="product-card">
+<a href="{{ product.url }}" class="product-card" aria-label="{{ product.title | escape }}">
   <div
     class="product-card__art"
     style="background: repeating-linear-gradient(135deg, {{ accent }}26, {{ accent }}26 7px, {{ accent }}0d 7px, {{ accent }}0d 14px); border: 1px dashed {{ accent }}70;"
   >
     {%- if product.featured_image != blank -%}
-      {{ product.featured_image | image_url: width: 300 | image_tag: class: 'product-card__art-img', loading: 'lazy', alt: product.title }}
+      {{ product.featured_image | image_url: width: 400 | image_tag: class: 'product-card__art-img', loading: 'lazy', alt: product.title }}
     {%- else -%}
       <span class="product-card__art-lbl" style="color: {{ accent }}">{{- product.title -}}&nbsp;art</span>
     {%- endif -%}
@@ -52,14 +52,15 @@
     <span class="product-card__status" style="color: {{ status_color }}; border-color: {{ status_color }}">
       {{- status_text -}}
     </span>
+    <span class="product-card__quick-view" aria-hidden="true">{{ 'products.quick_add' | t }}</span>
   </div>
   <p class="product-card__title">{{- product.title | escape -}}</p>
   <p class="product-card__sub">{{ 'products.designs_count' | t: count: 6 }}</p>
   <div class="product-card__foot">
-    <div>
-      <div class="product-card__rating">★ 4.9</div>
-      <div class="product-card__price">{{- product.price | money_without_trailing_zeros -}}</div>
-    </div>
+    <p class="product-card__price">
+      {%- if product.price_varies -%}from {%- endif -%}
+      {{- product.price | money_without_trailing_zeros -}}
+    </p>
     <span class="product-card__add" aria-label="{{ 'products.quick_add' | t }}">＋</span>
   </div>
 </a>
@@ -68,16 +69,17 @@
   .product-card {
     display: block;
     background: #fff;
-    border: 1px solid var(--color-mist);
+    border: 1px solid var(--color-hairline);
     border-radius: 16px;
-    box-shadow: 0 6px 18px rgba(11, 18, 32, 0.06);
     padding: 8px;
     text-decoration: none;
     box-sizing: border-box;
     position: relative;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
   }
+
   .product-card__art {
-    height: 116px;
+    height: 130px;
     border-radius: 10px;
     position: relative;
     display: flex;
@@ -86,6 +88,7 @@
     margin-bottom: 8px;
     overflow: hidden;
   }
+
   .product-card__art-img {
     position: absolute;
     inset: 0;
@@ -93,6 +96,7 @@
     height: 100%;
     object-fit: cover;
   }
+
   .product-card__art-lbl {
     font-family: var(--font-label);
     font-size: 9px;
@@ -103,6 +107,7 @@
     opacity: 0.9;
     line-height: 1.3;
   }
+
   .product-card__badge {
     position: absolute;
     top: 6px;
@@ -115,6 +120,7 @@
     border-radius: 6px;
     line-height: 1;
   }
+
   .product-card__status {
     position: absolute;
     top: 6px;
@@ -128,6 +134,24 @@
     border: 1px solid;
     line-height: 1;
   }
+
+  .product-card__quick-view {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(11, 18, 32, 0.5);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    pointer-events: none;
+  }
+
   .product-card__title {
     font-family: var(--font-display);
     font-size: 14px;
@@ -136,6 +160,7 @@
     color: var(--color-ink);
     margin: 2px 0;
   }
+
   .product-card__sub {
     font-family: var(--font-body);
     font-size: 11px;
@@ -144,33 +169,29 @@
     color: var(--color-ink-faint);
     margin-bottom: 2px;
   }
+
   .product-card__foot {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
     margin-top: 6px;
   }
-  .product-card__rating {
-    font-family: var(--font-body);
-    font-size: 11px;
-    font-weight: 600;
-    line-height: 1.4;
-    color: var(--color-ink-faint);
-  }
+
   .product-card__price {
     font-family: var(--font-display);
     font-size: 15px;
     font-weight: 800;
     line-height: 1.1;
     color: var(--color-ink);
+    margin: 0;
   }
+
   .product-card__add {
     width: 30px;
     height: 30px;
     border-radius: 50%;
     background: var(--color-blue);
     color: #fff;
-    font-family: var(--font-body);
     font-size: 17px;
     font-weight: 600;
     display: flex;
@@ -178,5 +199,28 @@
     justify-content: center;
     flex: 0 0 auto;
     line-height: 1;
+  }
+
+  @media (min-width: 768px) {
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(11, 18, 32, 0.10);
+    }
+
+    .product-card:hover .product-card__quick-view {
+      opacity: 1;
+    }
+
+    .product-card__art {
+      height: 220px;
+    }
+
+    .product-card__title {
+      font-size: 16px;
+    }
+
+    .product-card__price {
+      font-size: 17px;
+    }
   }
 {% endstylesheet %}

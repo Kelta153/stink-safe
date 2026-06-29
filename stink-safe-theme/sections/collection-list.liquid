@@ -3,77 +3,114 @@
 -%}
 
 <div class="col-list">
-  <div class="col-list__header">
-    <h2 class="col-list__heading">
-      {{- section.settings.heading | default: 'Shop by collection' | escape -}}
-    </h2>
-    <a href="{{ see_all_url }}" class="col-list__see-all">
-      {{- section.settings.see_all_text | default: 'See all' | escape -}}
-    </a>
-  </div>
+  <div class="col-list__inner">
+    <div class="col-list__header">
+      <h2 class="col-list__heading">
+        {{- section.settings.heading | default: 'Shop by collection' | escape -}}
+      </h2>
+      <a href="{{ see_all_url }}" class="col-list__see-all">
+        {{- section.settings.see_all_text | default: 'All collections →' | escape -}}
+      </a>
+    </div>
 
-  <div class="col-list__scroll">
-    {%- if section.settings.collections != blank -%}
-      {%- for collection in section.settings.collections -%}
-        {%- liquid
-          assign tile_accent = '#2463EB'
-          assign col_h = collection.handle
-          if col_h contains 'crimewave'
-            assign tile_accent = '#F4A300'
-          elsif col_h contains 'snackverse'
-            assign tile_accent = '#EC4899'
-          elsif col_h contains 'horror-highs' or col_h contains 'horror_highs'
-            assign tile_accent = '#7C3AED'
-          elsif col_h contains 'horror-hotbox' or col_h contains 'horror_hotbox'
-            assign tile_accent = '#991B1B'
-          endif
-        -%}
-        <a href="{{ collection.url }}" class="col-list__tile">
-          <div class="col-list__img-wrap">
-            {%- if collection.featured_image != blank -%}
-              {{ collection.featured_image | image_url: width: 260 | image_tag: loading: 'lazy', alt: collection.title }}
+    <div class="col-list__scroll">
+      {%- if section.settings.collections != blank -%}
+        {%- for collection in section.settings.collections -%}
+          {%- liquid
+            assign tile_accent = '#2463EB'
+            assign col_h = collection.handle
+            assign is_horror = false
+
+            if col_h contains 'crimewave'
+              assign tile_accent = '#F4A300'
+            elsif col_h contains 'snackverse'
+              assign tile_accent = '#EC4899'
+            elsif col_h contains 'horror-highs' or col_h contains 'horror_highs'
+              assign tile_accent = '#7C3AED'
+              assign is_horror = true
+            elsif col_h contains 'horror-hotbox' or col_h contains 'horror_hotbox'
+              assign tile_accent = '#991B1B'
+              assign is_horror = true
+            endif
+
+            assign tagline = collection.metafields.custom.tagline
+            if tagline == blank
+              if col_h contains 'crimewave'
+                assign tagline = 'Pull off the perfect stash.'
+              elsif col_h contains 'snackverse'
+                assign tagline = 'Snacks. In space. Sealed tight.'
+              elsif col_h contains 'horror-highs' or col_h contains 'horror_highs'
+                assign tagline = 'The scariest thing is how good it looks.'
+              elsif col_h contains 'horror-hotbox' or col_h contains 'horror_hotbox'
+                assign tagline = 'Lock the door. Seal the bag.'
+              endif
+            endif
+          -%}
+          <a href="{{ collection.url }}" class="col-list__tile">
+            <div class="col-list__img-wrap">
+              {%- if collection.featured_image != blank -%}
+                {{ collection.featured_image | image_url: width: 400 | image_tag: loading: 'lazy', alt: collection.title }}
+              {%- else -%}
+                <div
+                  class="col-list__placeholder"
+                  style="background: repeating-linear-gradient(135deg, {{ tile_accent }}26, {{ tile_accent }}26 7px, {{ tile_accent }}0d 7px, {{ tile_accent }}0d 14px); border: 1px dashed {{ tile_accent }}70;"
+                >
+                  <span style="color: {{ tile_accent }}">{{- collection.title | escape -}}</span>
+                </div>
+              {%- endif -%}
+              {%- if forloop.first -%}
+                <span class="col-list__badge-new">NEW</span>
+              {%- endif -%}
+            </div>
+            <div class="col-list__title-row">
+              <p class="col-list__title">{{- collection.title | escape -}}</p>
+              {%- if is_horror -%}
+                <span class="col-list__age-badge" style="color: {{ tile_accent }}; border-color: {{ tile_accent }}">18+</span>
+              {%- endif -%}
+            </div>
+            {%- if tagline != blank -%}
+              <p class="col-list__tagline">{{- tagline | escape -}}</p>
             {%- else -%}
+              <p class="col-list__issue">
+                {%- if collection.metafields.custom.issue_range != blank -%}
+                  {{- collection.metafields.custom.issue_range -}}
+                {%- else -%}
+                  ISSUE 01–06
+                {%- endif -%}
+              </p>
+            {%- endif -%}
+          </a>
+        {%- endfor -%}
+      {%- else -%}
+        {%- assign placeholder_cols = 'Cartoon Crimewave,Snackverse,Horror Highs,Horror Hotbox' | split: ',' -%}
+        {%- assign placeholder_accents = '#F4A300,#EC4899,#7C3AED,#991B1B' | split: ',' -%}
+        {%- assign placeholder_taglines = 'Pull off the perfect stash.,Snacks. In space. Sealed tight.,The scariest thing is how good it looks.,Lock the door. Seal the bag.' | split: ',' -%}
+        {%- for label in placeholder_cols -%}
+          {%- assign ph_accent = placeholder_accents[forloop.index0] -%}
+          {%- assign ph_tagline = placeholder_taglines[forloop.index0] -%}
+          {%- assign ph_horror = false -%}
+          {%- if label contains 'Horror' -%}{%- assign ph_horror = true -%}{%- endif -%}
+          <div class="col-list__tile col-list__tile--placeholder">
+            <div class="col-list__img-wrap">
               <div
                 class="col-list__placeholder"
-                style="background: repeating-linear-gradient(135deg, {{ tile_accent }}26, {{ tile_accent }}26 7px, {{ tile_accent }}0d 7px, {{ tile_accent }}0d 14px); border: 1px dashed {{ tile_accent }}70;"
+                style="background: repeating-linear-gradient(135deg, {{ ph_accent }}26, {{ ph_accent }}26 7px, {{ ph_accent }}0d 7px, {{ ph_accent }}0d 14px); border: 1px dashed {{ ph_accent }}70;"
               >
-                <span style="color: {{ tile_accent }}">{{- collection.title | escape -}}</span>
+                <span style="color: {{ ph_accent }}">{{- label | escape -}}</span>
               </div>
-            {%- endif -%}
-            {%- if forloop.first -%}
-              <span class="col-list__badge-new">NEW</span>
-            {%- endif -%}
-          </div>
-          <p class="col-list__title">{{- collection.title | escape -}}</p>
-          <p class="col-list__issue">
-            {%- if collection.metafields.custom.issue_range != blank -%}
-              {{- collection.metafields.custom.issue_range -}}
-            {%- else -%}
-              ISSUE 01–06
-            {%- endif -%}
-          </p>
-        </a>
-      {%- endfor -%}
-    {%- else -%}
-      {%- assign placeholder_cols = 'Cartoon Crimewave,Snackverse,Horror Highs,Horror Hotbox' | split: ',' -%}
-      {%- assign placeholder_accents = '#F4A300,#EC4899,#7C3AED,#991B1B' | split: ',' -%}
-      {%- for label in placeholder_cols -%}
-        {%- assign ph_accent = placeholder_accents[forloop.index0] -%}
-        <div class="col-list__tile col-list__tile--placeholder">
-          <div class="col-list__img-wrap">
-            <div
-              class="col-list__placeholder"
-              style="background: repeating-linear-gradient(135deg, {{ ph_accent }}26, {{ ph_accent }}26 7px, {{ ph_accent }}0d 7px, {{ ph_accent }}0d 14px); border: 1px dashed {{ ph_accent }}70;"
-            >
-              <span style="color: {{ ph_accent }}">{{- label | escape -}}</span>
+              {%- if forloop.first -%}<span class="col-list__badge-new">NEW</span>{%- endif -%}
             </div>
-            {%- if forloop.first -%}<span class="col-list__badge-new">NEW</span>{%- endif -%}
+            <div class="col-list__title-row">
+              <p class="col-list__title">{{- label | escape -}}</p>
+              {%- if ph_horror -%}
+                <span class="col-list__age-badge" style="color: {{ ph_accent }}; border-color: {{ ph_accent }}">18+</span>
+              {%- endif -%}
+            </div>
+            <p class="col-list__tagline">{{- ph_tagline | escape -}}</p>
           </div>
-          <p class="col-list__title">{{- label | escape -}}</p>
-          <p class="col-list__issue">ISSUE 01–06</p>
-        </div>
-      {%- endfor -%}
-    {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
   </div>
 </div>
 
@@ -81,57 +118,72 @@
   .col-list {
     padding: 18px 0 6px;
   }
+
+  .col-list__inner {
+    /* mobile: no centering wrapper, let page grid handle gutters */
+  }
+
   .col-list__header {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    padding: 0 var(--page-gutter);
-    margin-bottom: 12px;
+    margin-bottom: 14px;
   }
+
   .col-list__heading {
     font-family: var(--font-display);
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 800;
     line-height: 1;
     color: var(--color-ink);
     margin: 0;
+    letter-spacing: -0.01em;
   }
+
   .col-list__see-all {
     font-family: var(--font-body);
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--color-blue);
     text-decoration: none;
+    white-space: nowrap;
   }
+
   .col-list__scroll {
     display: flex;
     gap: 12px;
     overflow-x: auto;
-    padding: 0 var(--page-gutter) 6px;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    padding-bottom: 6px;
   }
+
   .col-list__scroll::-webkit-scrollbar { display: none; }
+
   .col-list__tile {
     flex: 0 0 auto;
     width: 130px;
     text-decoration: none;
   }
+
   .col-list__tile--placeholder {
     cursor: default;
   }
+
   .col-list__img-wrap {
     position: relative;
     height: 152px;
     border-radius: 14px;
     overflow: hidden;
   }
+
   .col-list__img-wrap img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
   }
+
   .col-list__placeholder {
     width: 100%;
     height: 100%;
@@ -139,6 +191,7 @@
     align-items: center;
     justify-content: center;
   }
+
   .col-list__placeholder span {
     font-family: var(--font-label);
     font-size: 9px;
@@ -149,6 +202,7 @@
     opacity: 0.9;
     line-height: 1.3;
   }
+
   .col-list__badge-new {
     position: absolute;
     top: 8px;
@@ -163,14 +217,43 @@
     transform: rotate(-4deg);
     line-height: 1;
   }
+
+  .col-list__title-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
   .col-list__title {
     font-family: var(--font-display);
     font-size: 13px;
     font-weight: 700;
     line-height: 1.15;
     color: var(--color-ink);
-    margin: 8px 0 0;
+    margin: 0;
   }
+
+  .col-list__age-badge {
+    font-family: var(--font-body);
+    font-size: 9px;
+    font-weight: 800;
+    border: 1px solid;
+    border-radius: 20px;
+    padding: 2px 5px;
+    line-height: 1;
+    flex: 0 0 auto;
+  }
+
+  .col-list__tagline {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--color-ink-faint);
+    margin: 3px 0 0;
+  }
+
   .col-list__issue {
     font-family: var(--font-label);
     font-size: 9px;
@@ -179,18 +262,60 @@
     color: var(--color-ink-faint);
     margin: 4px 0 0;
   }
-  @media (min-width: 640px) {
+
+  @media (min-width: 768px) {
+    .col-list {
+      padding: 0;
+    }
+
+    .col-list__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 40px 8px;
+    }
+
+    .col-list__heading {
+      font-size: 30px;
+    }
+
+    .col-list__see-all {
+      font-size: 14px;
+    }
+
     .col-list__scroll {
       overflow-x: visible;
-      flex-wrap: wrap;
-      gap: 16px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      padding-bottom: 0;
     }
+
     .col-list__tile {
-      flex: 1 1 0;
       width: auto;
     }
+
     .col-list__img-wrap {
-      height: 260px;
+      height: 240px;
+      border-radius: 16px;
+    }
+
+    .col-list__title {
+      font-size: 18px;
+      margin-top: 0;
+    }
+
+    .col-list__title-row {
+      margin-top: 14px;
+    }
+
+    .col-list__tagline {
+      font-size: 13px;
+      margin-top: 4px;
+      color: #7B8496;
+    }
+
+    .col-list__age-badge {
+      font-size: 9px;
     }
   }
 {% endstylesheet %}
@@ -209,7 +334,7 @@
       "type": "text",
       "id": "see_all_text",
       "label": "t:labels.see_all_text",
-      "default": "See all"
+      "default": "All collections →"
     },
     {
       "type": "url",

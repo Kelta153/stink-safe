@@ -6,10 +6,10 @@
         "eyebrow_label": "Drop No. 001 — Limited Series",
         "headline_line1": "Art You Love.",
         "headline_line2": "Smell You Don't.",
-        "subheading": "Premium smell-proof storage with collector-grade comic art. Lock in the freshness — flex the artwork.",
-        "cta_primary_text": "Shop all bags",
-        "cta_secondary_text": "Explore bundles",
-        "trust_line": "4.9 · 300+ collectors · Ships discreetly"
+        "subheading": "Odour-resistant storage with collector-grade comic art — built for travel, kitchen, gym bag and everywhere in between.",
+        "cta_primary_text": "Shop all",
+        "cta_secondary_text": "Our story",
+        "trust_line": "Plain, unbranded parcels · Fast UK dispatch · Secure checkout"
       }
     },
     "trust-strip": {
@@ -30,28 +30,44 @@
         "see_all_text": "Shop all"
       }
     },
-    "bundle-banner": {
-      "type": "bundle-banner",
+    "lifestyle-band": {
+      "type": "lifestyle-band",
       "settings": {
-        "label": "Set No. 01 — Best value",
-        "badge": "Save up to 40%",
-        "title": "Collector's Crate",
-        "description": "All four collections — Cartoon Crimewave, Snackverse, Horror Highs & Horror Hotbox.",
-        "cta_text": "Shop the set"
+        "heading": "Built for real life",
+        "item_1_title": "Goes anywhere",
+        "item_1_sub": "Cabin bag, glovebox, festival kit.",
+        "item_2_title": "Kitchen & pantry",
+        "item_2_sub": "Keep strong smells contained.",
+        "item_3_title": "Gym & gear",
+        "item_3_sub": "Sweaty kit stays separate."
+      }
+    },
+    "accessories-teaser": {
+      "type": "accessories-teaser",
+      "settings": {
+        "eyebrow": "Coming soon",
+        "heading": "Accessories",
+        "body": "Jars, cases & activated-charcoal inserts — landing soon. Be first to know.",
+        "email_placeholder": "Email address",
+        "notify_me": "Notify me"
       }
     },
     "social-proof": {
       "type": "social-proof",
       "settings": {
-        "rating_summary": "4.9 from 300+ verified reviews",
+        "heading": "#StinkSafe in the wild",
+        "follow_label": "Follow @stinksafe →",
         "review_text": "Genuinely the only smell-proof bag I'd leave out on a shelf. The art's unreal and the seal actually works.",
         "reviewer_name": "Maya R. · Verified buyer"
       }
     },
-    "discreet-by-design": {
-      "type": "discreet-by-design",
+    "brand-story": {
+      "type": "brand-story",
       "settings": {
-        "heading": "Discreet by design"
+        "eyebrow": "Our story",
+        "heading": "Storage you'll actually want to show off.",
+        "body": "Odour-control storage always looked like an afterthought. We put collectible comic art on a properly engineered, odour-resistant pack — useful, discreet and genuinely nice to own.",
+        "cta": "Read our story"
       }
     },
     "drop-list": {
@@ -61,6 +77,10 @@
         "subheading": "First dibs on every drop, plus 10% off your first order.",
         "telegram_cta": "Or get drops on Telegram"
       }
+    },
+    "trust-band": {
+      "type": "trust-band",
+      "settings": {}
     }
   },
   "order": [
@@ -68,9 +88,11 @@
     "trust-strip",
     "collection-list",
     "featured-products",
-    "bundle-banner",
+    "lifestyle-band",
+    "accessories-teaser",
     "social-proof",
-    "discreet-by-design",
-    "drop-list"
+    "brand-story",
+    "drop-list",
+    "trust-band"
   ]
 }

@@ -1,135 +1,147 @@
 <footer class="site-footer full-width">
 
-  {%- comment -%} Halftone dot texture {%- endcomment -%}
   <div class="site-footer__dots" aria-hidden="true"></div>
 
   <div class="site-footer__inner">
 
-    {%- comment -%}
-      Logo — uses the asset file by default; section.settings.logo overrides it
-      when a merchant uploads their own via the theme editor.
-    {%- endcomment -%}
-    {%- if section.settings.logo != blank -%}
-      <a href="{{ routes.root_url }}" class="site-footer__logo-link">
-        {{- section.settings.logo
-          | image_url: width: 240
-          | image_tag:
-            alt: shop.name,
-            loading: 'lazy',
-            class: 'site-footer__logo'
-        -}}
-      </a>
-    {%- else -%}
-      <a href="{{ routes.root_url }}" class="site-footer__logo-link">
-        <img
-          src="{{ 'stink-safe-logo.png' | asset_url }}"
-          alt="{{ shop.name | escape }}"
-          class="site-footer__logo"
-          loading="lazy"
-          width="160"
-          height="42"
-        >
-      </a>
-    {%- endif -%}
+    {%- comment -%} Col 1: Brand — logo + tagline + socials {%- endcomment -%}
+    <div class="site-footer__brand">
+      {%- if section.settings.logo != blank -%}
+        <a href="{{ routes.root_url }}" class="site-footer__logo-link">
+          {{- section.settings.logo | image_url: width: 240 | image_tag: alt: shop.name, loading: 'lazy', class: 'site-footer__logo' -}}
+        </a>
+      {%- else -%}
+        <a href="{{ routes.root_url }}" class="site-footer__logo-link">
+          <img src="{{ 'stink-safe-logo.png' | asset_url }}" alt="{{ shop.name | escape }}" class="site-footer__logo" loading="lazy" width="160" height="42">
+        </a>
+      {%- endif -%}
 
-    {%- comment -%} Tagline {%- endcomment -%}
-    {%- if section.settings.tagline != blank -%}
-      <p class="site-footer__tagline">{{- section.settings.tagline | escape -}}</p>
-    {%- endif -%}
+      {%- if section.settings.tagline != blank -%}
+        <p class="site-footer__tagline">{{- section.settings.tagline | escape -}}</p>
+      {%- endif -%}
 
-    {%- comment -%} Three link columns {%- endcomment -%}
-    <div class="site-footer__columns">
-
-      <div class="site-footer__column">
-        {%- if section.settings.shop_heading != blank -%}
-          <p class="site-footer__col-heading">{{- section.settings.shop_heading | escape -}}</p>
+      <div class="site-footer__socials">
+        {%- if section.settings.instagram_url != blank -%}
+          <a href="{{ section.settings.instagram_url }}" class="site-footer__social" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r="1.1" fill="currentColor" stroke="none"/></svg>
+          </a>
         {%- endif -%}
-        {%- for link in section.settings.shop_menu.links -%}
-          <a href="{{ link.url }}" class="site-footer__link">{{- link.title -}}</a>
-        {%- endfor -%}
-      </div>
-
-      <div class="site-footer__column">
-        {%- if section.settings.help_heading != blank -%}
-          <p class="site-footer__col-heading">{{- section.settings.help_heading | escape -}}</p>
+        {%- if section.settings.tiktok_url != blank -%}
+          <a href="{{ section.settings.tiktok_url }}" class="site-footer__social" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 9.5v6a2.5 2.5 0 1 1-2.5-2.5"/><path d="M9 5c.4 2.3 1.9 3.8 4.2 4v2.7C11 11.6 9.7 10.8 9 9.7"/></svg>
+          </a>
         {%- endif -%}
-        {%- for link in section.settings.help_menu.links -%}
-          <a href="{{ link.url }}" class="site-footer__link">{{- link.title -}}</a>
-        {%- endfor -%}
-      </div>
-
-      <div class="site-footer__column">
-        {%- if section.settings.company_heading != blank -%}
-          <p class="site-footer__col-heading">{{- section.settings.company_heading | escape -}}</p>
+        {%- if section.settings.telegram_url != blank -%}
+          <a href="{{ section.settings.telegram_url }}" class="site-footer__social" aria-label="Telegram" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 3-9.5 9.5"/><path d="M22 3 15 21l-3.5-7.5L4 10z"/></svg>
+          </a>
         {%- endif -%}
-        {%- for link in section.settings.company_menu.links -%}
-          <a href="{{ link.url }}" class="site-footer__link">{{- link.title -}}</a>
-        {%- endfor -%}
       </div>
-
     </div>
 
-    {%- comment -%} Social icon row {%- endcomment -%}
-    <div class="site-footer__socials">
-
-      {%- if section.settings.instagram_url != blank -%}
-        <a href="{{ section.settings.instagram_url }}" class="site-footer__social" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="4" y="4" width="16" height="16" rx="5"/>
-            <circle cx="12" cy="12" r="4"/>
-            <circle cx="17" cy="7" r="1.1" fill="currentColor" stroke="none"/>
-          </svg>
-        </a>
+    {%- comment -%} Col 2: Shop links {%- endcomment -%}
+    <div class="site-footer__column site-footer__column--shop">
+      {%- if section.settings.shop_heading != blank -%}
+        <p class="site-footer__col-heading">{{- section.settings.shop_heading | escape -}}</p>
       {%- endif -%}
+      {%- for link in section.settings.shop_menu.links -%}
+        <a href="{{ link.url }}" class="site-footer__link">{{- link.title -}}</a>
+      {%- endfor -%}
+    </div>
 
-      {%- if section.settings.tiktok_url != blank -%}
-        <a href="{{ section.settings.tiktok_url }}" class="site-footer__social" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M9 9.5v6a2.5 2.5 0 1 1-2.5-2.5"/>
-            <path d="M9 5c.4 2.3 1.9 3.8 4.2 4v2.7C11 11.6 9.7 10.8 9 9.7"/>
-          </svg>
-        </a>
+    {%- comment -%} Col 3: Help links {%- endcomment -%}
+    <div class="site-footer__column site-footer__column--help">
+      {%- if section.settings.help_heading != blank -%}
+        <p class="site-footer__col-heading">{{- section.settings.help_heading | escape -}}</p>
       {%- endif -%}
+      {%- for link in section.settings.help_menu.links -%}
+        <a href="{{ link.url }}" class="site-footer__link">{{- link.title -}}</a>
+      {%- endfor -%}
+    </div>
+
+    {%- comment -%} Col 4: Company links {%- endcomment -%}
+    <div class="site-footer__column site-footer__column--company">
+      {%- if section.settings.company_heading != blank -%}
+        <p class="site-footer__col-heading">{{- section.settings.company_heading | escape -}}</p>
+      {%- endif -%}
+      {%- for link in section.settings.company_menu.links -%}
+        <a href="{{ link.url }}" class="site-footer__link">{{- link.title -}}</a>
+      {%- endfor -%}
+    </div>
+
+    {%- comment -%} Col 5: Email signup + Telegram {%- endcomment -%}
+    <div class="site-footer__signup">
+      <p class="site-footer__col-heading">{{ 'footer.drop_heading' | t }}</p>
+      <p class="site-footer__signup-sub">{{ 'footer.drop_sub' | t }}</p>
+
+      {%- form 'customer', id: 'footer-newsletter', class: 'footer-newsletter' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <div class="footer-newsletter__row">
+          <input
+            type="email"
+            name="contact[email]"
+            id="footer-email"
+            placeholder="{{ 'general.drop_list.email_placeholder' | t }}"
+            class="footer-newsletter__input"
+            required
+            autocomplete="email"
+            aria-label="{{ 'general.drop_list.email_placeholder' | t }}"
+          >
+          <button type="submit" class="footer-newsletter__btn">{{ 'footer.join' | t }}</button>
+        </div>
+        {%- if form.posted_successfully? -%}
+          <p class="footer-newsletter__success">{{ 'general.drop_list.success' | t }}</p>
+        {%- endif -%}
+        {%- if form.errors -%}
+          <p class="footer-newsletter__error">{{ form.errors | default_errors }}</p>
+        {%- endif -%}
+      {%- endform -%}
 
       {%- if section.settings.telegram_url != blank -%}
-        <a href="{{ section.settings.telegram_url }}" class="site-footer__social" aria-label="Telegram" target="_blank" rel="noopener noreferrer">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="m22 3-9.5 9.5"/>
-            <path d="M22 3 15 21l-3.5-7.5L4 10z"/>
-          </svg>
+        <a href="{{ section.settings.telegram_url }}" class="footer-telegram" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#3FA9F5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:17px;height:17px;flex:0 0 auto"><path d="m22 3-9.5 9.5"/><path d="M22 3 15 21l-3.5-7.5L4 10z"/></svg>
+          <span>{{ 'footer.join_telegram' | t }}</span>
         </a>
       {%- endif -%}
-
     </div>
 
-    {%- comment -%} Payment icons {%- endcomment -%}
-    {%- if section.settings.show_payment_icons and shop.enabled_payment_types != empty -%}
-      <div class="site-footer__payments" aria-label="{{ 'footer.payment_methods' | t }}">
-        {%- for type in shop.enabled_payment_types -%}
-          <span class="site-footer__payment-pill">
-            {{- type | payment_type_svg_tag -}}
-          </span>
-        {%- endfor -%}
-      </div>
-    {%- endif -%}
+    {%- comment -%} Bottom bar: payments + legal links {%- endcomment -%}
+    <div class="site-footer__bottom">
+      {%- if section.settings.show_payment_icons and shop.enabled_payment_types != empty -%}
+        <div class="site-footer__payments" aria-label="{{ 'footer.payment_methods' | t }}">
+          {%- for type in shop.enabled_payment_types -%}
+            <span class="site-footer__payment-pill">{{- type | payment_type_svg_tag -}}</span>
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <div></div>
+      {%- endif -%}
 
-    {%- comment -%} Legal strip {%- endcomment -%}
-    <div class="site-footer__legal">
-      <p>
-        {%- if section.settings.legal_text != blank -%}
-          {{- section.settings.legal_text | escape -}}&ensp;&middot;&ensp;
+      <div class="site-footer__legal-links">
+        {%- if section.settings.privacy_url != blank -%}
+          <a href="{{ section.settings.privacy_url }}" class="site-footer__legal-link">{{ 'footer.privacy' | t }}</a>
         {%- endif -%}
-        &copy;&nbsp;{{ 'now' | date: '%Y' }}&nbsp;{{ shop.name | escape }}.&nbsp;{{ 'footer.all_rights' | t }}
-      </p>
+        {%- if section.settings.cookies_url != blank -%}
+          <a href="{{ section.settings.cookies_url }}" class="site-footer__legal-link">{{ 'footer.cookies' | t }}</a>
+        {%- endif -%}
+        {%- if section.settings.terms_url != blank -%}
+          <a href="{{ section.settings.terms_url }}" class="site-footer__legal-link">{{ 'footer.terms' | t }}</a>
+        {%- endif -%}
+      </div>
     </div>
+
+    {%- comment -%} Legal disclaimer {%- endcomment -%}
+    <p class="site-footer__disclaimer">
+      {%- if section.settings.legal_text != blank -%}
+        {{- section.settings.legal_text | escape -}}&ensp;&middot;&ensp;
+      {%- endif -%}
+      &copy;&nbsp;{{ 'now' | date: '%Y' }}&nbsp;{{ shop.name | escape }}.
+    </p>
 
   </div>
 </footer>
 
 {% stylesheet %}
-  /* --------------------------------------------------------
-     Footer shell — Ink canvas, full bleed
-  -------------------------------------------------------- */
   .site-footer {
     background: var(--color-ink);
     color: var(--color-white);
@@ -137,110 +149,58 @@
     overflow: hidden;
   }
 
-  /* Halftone dots — from wireframe: rgba(255,255,255,.06), 1.4px on 13px grid */
   .site-footer__dots {
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1.4px, transparent 1.6px);
-    background-size: 13px 13px;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1.4px, transparent 1.6px);
+    background-size: 15px 15px;
     pointer-events: none;
   }
 
-  /* Inner content above the texture — padding matches wireframe: 30px 18px 20px */
   .site-footer__inner {
     position: relative;
-    padding: 30px 18px 20px;
+    padding: 40px 20px 24px;
     display: flex;
     flex-direction: column;
+    gap: 32px;
   }
 
-  /* --------------------------------------------------------
-     Logo
-  -------------------------------------------------------- */
+  /* ---- Brand column ---- */
+  .site-footer__brand {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
   .site-footer__logo-link {
     display: inline-block;
-    margin-bottom: 12px;
     text-decoration: none;
   }
-
   .site-footer__logo {
     height: 42px;
     width: auto;
     display: block;
   }
 
-  /* Fallback shop name text when no logo asset is set */
-  .site-footer__shop-name {
-    display: inline-block;
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 800;
-    color: var(--color-white);
-    letter-spacing: -0.02em;
-    margin-bottom: 12px;
-  }
-
-  /* --------------------------------------------------------
-     Tagline
-  -------------------------------------------------------- */
   .site-footer__tagline {
     font-family: var(--font-body);
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 400;
-    line-height: 1.55;
+    line-height: 1.6;
     color: var(--color-ink-subtle);
-    max-width: 236px;
-    margin-bottom: 24px;
+    max-width: 280px;
   }
 
-  /* --------------------------------------------------------
-     Link columns — wireframe: 3-col grid, 14px gap
-  -------------------------------------------------------- */
-  .site-footer__columns {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 14px;
-    margin-bottom: 24px;
-  }
-
-  .site-footer__col-heading {
-    font-family: var(--font-label);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--color-white);
-    margin-bottom: 12px;
-  }
-
-  .site-footer__link {
-    display: block;
-    font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 1;
-    color: var(--color-ink-subtle);
-    text-decoration: none;
-    margin-bottom: 10px;
-    transition: color 120ms;
-  }
-  .site-footer__link:last-child { margin-bottom: 0; }
-  .site-footer__link:hover { color: var(--color-white); }
-
-  /* --------------------------------------------------------
-     Social icons — wireframe: 34×34px, radius 10px, bg #11182B
-  -------------------------------------------------------- */
   .site-footer__socials {
     display: flex;
     gap: 8px;
-    margin-bottom: 18px;
   }
 
   .site-footer__social {
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-    background: var(--color-surface-dark);
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    background: #11182B;
     color: var(--color-ink-subtle);
     display: flex;
     align-items: center;
@@ -249,28 +209,129 @@
     flex: 0 0 auto;
     transition: color 120ms, background 120ms;
   }
-  .site-footer__social svg {
-    width: 17px;
-    height: 17px;
-    flex: 0 0 auto;
-  }
-  .site-footer__social:hover {
-    color: var(--color-white);
-    background: #1e2a42;
+  .site-footer__social svg { width: 18px; height: 18px; flex: 0 0 auto; }
+  .site-footer__social:hover { color: var(--color-white); background: #1e2a42; }
+
+  /* ---- Link columns ---- */
+  .site-footer__column {
+    display: flex;
+    flex-direction: column;
   }
 
-  /* --------------------------------------------------------
-     Payment icons — each in a white rounded pill
-  -------------------------------------------------------- */
+  .site-footer__col-heading {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-white);
+    margin-bottom: 14px;
+  }
+
+  .site-footer__link {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--color-ink-subtle);
+    text-decoration: none;
+    margin-bottom: 13px;
+    transition: color 120ms;
+  }
+  .site-footer__link:last-child { margin-bottom: 0; }
+  .site-footer__link:hover { color: var(--color-white); }
+
+  /* ---- Email signup column ---- */
+  .site-footer__signup {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .site-footer__signup-sub {
+    font-family: var(--font-body);
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--color-ink-subtle);
+  }
+
+  .footer-newsletter { display: flex; flex-direction: column; gap: 8px; }
+  .footer-newsletter__row { display: flex; gap: 8px; }
+  .footer-newsletter__input {
+    flex: 1;
+    min-width: 0;
+    background: #11182B;
+    border: 1px solid #28324A;
+    border-radius: 10px;
+    padding: 11px 12px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--color-white);
+    outline: none;
+    transition: border-color 120ms;
+  }
+  .footer-newsletter__input::placeholder { color: var(--color-ink-faint); }
+  .footer-newsletter__input:focus { border-color: var(--color-blue); }
+  .footer-newsletter__btn {
+    background: var(--color-blue);
+    color: var(--color-white);
+    border: none;
+    border-radius: 10px;
+    padding: 0 18px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 120ms;
+  }
+  .footer-newsletter__btn:hover { background: var(--color-blue-pressed); }
+  .footer-newsletter__success {
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: var(--color-in-stock);
+  }
+  .footer-newsletter__error {
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: var(--color-alert);
+  }
+
+  .footer-telegram {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    background: #11182B;
+    border: 1px solid #28324A;
+    border-radius: 10px;
+    padding: 10px 12px;
+    text-decoration: none;
+    transition: border-color 120ms;
+  }
+  .footer-telegram:hover { border-color: #3FA9F5; }
+  .footer-telegram span {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-ink-subtle);
+    line-height: 1.3;
+  }
+
+  /* ---- Bottom bar ---- */
+  .site-footer__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-top: 20px;
+    border-top: 1px solid #1B2336;
+  }
+
   .site-footer__payments {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    margin-bottom: 18px;
     align-items: center;
   }
-
-  /* Pill wrapper — white bg + rounded corners matching wireframe */
   .site-footer__payment-pill {
     background: var(--color-white);
     border-radius: 5px;
@@ -280,92 +341,82 @@
     justify-content: center;
     height: 28px;
   }
+  .site-footer__payment-pill svg { height: 18px; width: auto; display: block; }
 
-  /* Shopify's payment_type_svg_tag outputs an <svg> — constrain it */
-  .site-footer__payment-pill svg {
-    height: 18px;
-    width: auto;
-    display: block;
+  .site-footer__legal-links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
   }
-
-  /* --------------------------------------------------------
-     Legal strip — wireframe: border-top #1B2336, color #7C8597
-  -------------------------------------------------------- */
-  .site-footer__legal {
-    border-top: 1px solid var(--color-border-dark);
-    padding-top: 14px;
-  }
-
-  .site-footer__legal p {
+  .site-footer__legal-link {
     font-family: var(--font-body);
-    font-size: 10px;
-    font-weight: 400;
-    line-height: 1.6;
-    color: var(--color-ink-faint);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-ink-subtle);
+    text-decoration: none;
+    transition: color 120ms;
+  }
+  .site-footer__legal-link:hover { color: var(--color-white); }
+
+  /* ---- Disclaimer ---- */
+  .site-footer__disclaimer {
+    font-family: var(--font-body);
+    font-size: 11px;
+    line-height: 1.7;
+    color: #6C7689;
+    max-width: 780px;
   }
 
-  /* --------------------------------------------------------
-     Desktop enhancements (768px+)
-     The wireframe is 390px mobile — these go beyond the spec
-     but maintain the brand feel at wider viewports.
-  -------------------------------------------------------- */
-  @media (min-width: 768px) {
-    .site-footer__inner {
-      padding: 40px 32px 28px;
-    }
-  }
-
+  /* ---- Desktop layout (1024px+) ---- */
   @media (min-width: 1024px) {
     .site-footer__inner {
       display: grid;
-      grid-template-columns: 220px 1fr;
-      grid-template-rows: auto auto auto auto auto;
-      column-gap: 64px;
-      padding: 48px 48px 36px;
+      grid-template-columns: 1.6fr 1fr 1fr 1fr 1.3fr;
+      grid-template-rows: auto auto auto;
+      column-gap: 40px;
+      row-gap: 0;
+      padding: 56px 32px 28px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
-    /* Brand column spans full height on the left */
-    .site-footer__logo-link {
+    .site-footer__brand {
       grid-column: 1;
       grid-row: 1;
-      margin-bottom: 0;
-      align-self: start;
+      padding-bottom: 40px;
+      border-bottom: 1px solid #1B2336;
     }
 
-    .site-footer__tagline {
-      grid-column: 1;
-      grid-row: 2;
-      max-width: none;
-      margin-bottom: 0;
+    .site-footer__column--shop    { grid-column: 2; grid-row: 1; }
+    .site-footer__column--help    { grid-column: 3; grid-row: 1; }
+    .site-footer__column--company { grid-column: 4; grid-row: 1; }
+
+    .site-footer__signup {
+      grid-column: 5;
+      grid-row: 1;
     }
 
-    /* Right side: columns, socials, payments, legal stack */
-    .site-footer__columns {
-      grid-column: 2;
-      grid-row: 1 / 3;
-      gap: 24px;
-      margin-bottom: 0;
-      align-self: start;
-    }
-
-    .site-footer__socials {
-      grid-column: 2;
-      grid-row: 3;
-      margin-bottom: 0;
-      margin-top: 28px;
-    }
-
-    .site-footer__payments {
-      grid-column: 2;
-      grid-row: 4;
-      margin-bottom: 0;
-      margin-top: 16px;
-    }
-
-    .site-footer__legal {
+    .site-footer__bottom {
       grid-column: 1 / -1;
-      grid-row: 5;
+      grid-row: 2;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
       margin-top: 28px;
+    }
+
+    .site-footer__disclaimer {
+      grid-column: 1 / -1;
+      grid-row: 3;
+    }
+  }
+
+  /* Cap the 5-col grid at ~1280px and centre it inside the full-bleed dark bg */
+  @media (min-width: 1024px) {
+    .site-footer__inner {
+      max-width: 1280px;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 {% endstylesheet %}
@@ -459,7 +510,26 @@
       "type": "textarea",
       "id": "legal_text",
       "label": "t:labels.legal_text",
-      "default": "For storage of legal goods only. Sold for lawful use in accordance with local law."
+      "default": "Stink Safe products are storage accessories intended for use with legal products only, in accordance with local law. You must be 18 or over to purchase."
+    },
+    {
+      "type": "header",
+      "content": "Legal page links"
+    },
+    {
+      "type": "url",
+      "id": "privacy_url",
+      "label": "Privacy policy URL"
+    },
+    {
+      "type": "url",
+      "id": "cookies_url",
+      "label": "Cookie policy URL"
+    },
+    {
+      "type": "url",
+      "id": "terms_url",
+      "label": "Terms of service URL"
     }
   ]
 }

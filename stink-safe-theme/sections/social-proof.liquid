@@ -1,69 +1,101 @@
 <div class="social-proof">
+  <div class="social-proof__inner">
 
-  <h2 class="social-proof__heading">
-    <span class="social-proof__star" aria-hidden="true">★</span>
-    {{- section.settings.rating_summary | default: '4.9 from 300+ verified reviews' | escape -}}
-  </h2>
-
-  {%- if section.settings.review_text != blank -%}
-    <div class="social-proof__bubble">
-      <p class="social-proof__quote">&#8220;{{- section.settings.review_text | escape -}}&#8221;</p>
-      <span class="social-proof__tail" aria-hidden="true"></span>
+    <div class="social-proof__header">
+      <h2 class="social-proof__heading">
+        {{- section.settings.heading | default: '#StinkSafe in the wild' | escape -}}
+      </h2>
+      {%- if section.settings.follow_url != blank -%}
+        <a href="{{ section.settings.follow_url }}" class="social-proof__follow" target="_blank" rel="noopener noreferrer">
+          {{- section.settings.follow_label | default: 'Follow @stinksafe →' | escape -}}
+        </a>
+      {%- else -%}
+        <span class="social-proof__follow">{{- section.settings.follow_label | default: 'Follow @stinksafe →' | escape -}}</span>
+      {%- endif -%}
     </div>
-  {%- endif -%}
 
-  <div class="social-proof__reviewer">
-    <div class="social-proof__avatar" aria-hidden="true"></div>
-    <div>
-      <p class="social-proof__name">{{- section.settings.reviewer_name | default: 'Maya R. · Verified buyer' | escape -}}</p>
-      <p class="social-proof__stars" aria-label="5 stars">★★★★★</p>
-    </div>
-  </div>
-
-  <div class="social-proof__ugc">
-    {%- assign ugc_accents = '#F4A300,#EC4899,#7C3AED,#991B1B' | split: ',' -%}
-    {%- for i in (1..4) -%}
-      {%- assign ugc_key = 'ugc_image_' | append: i -%}
-      {%- assign ugc_img = section.settings[ugc_key] -%}
-      {%- assign ugc_accent = ugc_accents[forloop.index0] -%}
-      <div class="social-proof__ugc-item">
-        {%- if ugc_img != blank -%}
-          {{ ugc_img | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
-        {%- else -%}
-          <div
-            class="social-proof__ugc-placeholder"
-            style="background: repeating-linear-gradient(135deg, {{ ugc_accent }}26, {{ ugc_accent }}26 5px, {{ ugc_accent }}0d 5px, {{ ugc_accent }}0d 10px); border: 1px dashed {{ ugc_accent }}70;"
-            aria-hidden="true"
-          ></div>
-        {%- endif -%}
+    {%- if section.settings.review_text != blank -%}
+      <div class="social-proof__quote-wrap">
+        <div class="social-proof__bubble">
+          <p class="social-proof__quote">&#8220;{{- section.settings.review_text | escape -}}&#8221;</p>
+        </div>
+        <div class="social-proof__reviewer">
+          <div class="social-proof__avatar" aria-hidden="true"></div>
+          <div>
+            <p class="social-proof__name">{{- section.settings.reviewer_name | default: 'Verified buyer' | escape -}}</p>
+          </div>
+        </div>
       </div>
-    {%- endfor -%}
-  </div>
+    {%- endif -%}
 
+    <div class="social-proof__ugc">
+      {%- assign ugc_accents = '#EC4899,#F4A300,#2463EB,#7C3AED,#16A34A' | split: ',' -%}
+      {%- for i in (1..5) -%}
+        {%- assign ugc_key = 'ugc_image_' | append: i -%}
+        {%- assign ugc_img = section.settings[ugc_key] -%}
+        {%- assign ugc_accent = ugc_accents[forloop.index0] -%}
+        <div class="social-proof__ugc-item">
+          {%- if ugc_img != blank -%}
+            {{ ugc_img | image_url: width: 300 | image_tag: loading: 'lazy', alt: '' }}
+          {%- else -%}
+            <div
+              class="social-proof__ugc-placeholder"
+              style="background: repeating-linear-gradient(135deg, {{ ugc_accent }}26, {{ ugc_accent }}26 5px, {{ ugc_accent }}0d 5px, {{ ugc_accent }}0d 10px); border: 1px dashed {{ ugc_accent }}70;"
+              aria-hidden="true"
+            ></div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+  </div>
 </div>
 
 {% stylesheet %}
   .social-proof {
     padding: 16px 0 6px;
   }
+
+  .social-proof__inner {
+    /* mobile: no wrapper, page grid provides gutters */
+  }
+
+  .social-proof__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
   .social-proof__heading {
     font-family: var(--font-display);
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 800;
     line-height: 1;
     color: var(--color-ink);
-    margin: 0 0 12px;
+    margin: 0;
+    letter-spacing: -0.01em;
   }
-  .social-proof__star {
-    color: var(--color-sun);
+
+  .social-proof__follow {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-blue);
+    text-decoration: none;
+    white-space: nowrap;
   }
+
+  .social-proof__quote-wrap {
+    margin-bottom: 14px;
+  }
+
   .social-proof__bubble {
-    position: relative;
     background: var(--color-mist);
     border-radius: 16px;
-    padding: 16px;
-    margin-bottom: 18px;
+    padding: 14px 16px;
   }
+
   .social-proof__quote {
     font-family: var(--font-body);
     font-size: 13px;
@@ -72,64 +104,97 @@
     color: var(--color-ink);
     margin: 0;
   }
-  .social-proof__tail {
-    position: absolute;
-    bottom: -9px;
-    left: 26px;
-    width: 18px;
-    height: 18px;
-    background: var(--color-mist);
-    transform: rotate(45deg);
-  }
+
   .social-proof__reviewer {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 14px;
+    margin-top: 10px;
   }
+
   .social-proof__avatar {
-    width: 34px;
-    height: 34px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     flex: 0 0 auto;
-    background: repeating-linear-gradient(135deg, #7C3AED33, #7C3AED33 6px, #7C3AED0d 6px, #7C3AED0d 12px);
+    background: repeating-linear-gradient(135deg, #7C3AED33, #7C3AED33 5px, #7C3AED0d 5px, #7C3AED0d 10px);
     border: 1px dashed #7C3AED70;
   }
+
   .social-proof__name {
     font-family: var(--font-body);
     font-size: 12px;
     font-weight: 700;
-    line-height: 1.1;
     color: var(--color-ink);
     margin: 0;
   }
-  .social-proof__stars {
-    font-family: var(--font-body);
-    font-size: 11px;
-    font-weight: 600;
-    line-height: 1;
-    color: var(--color-sun);
-    margin: 4px 0 0;
-  }
+
+  /* UGC grid: 4 across on mobile, 5 on desktop */
   .social-proof__ugc {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
     gap: 8px;
   }
+
+  .social-proof__ugc-item:nth-child(5) {
+    display: none;
+  }
+
   .social-proof__ugc-item {
     border-radius: 10px;
     overflow: hidden;
-    height: 68px;
+    aspect-ratio: 1;
   }
+
   .social-proof__ugc-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
   }
+
   .social-proof__ugc-placeholder {
     width: 100%;
     height: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .social-proof {
+      padding: 0;
+    }
+
+    .social-proof__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 40px 8px;
+    }
+
+    .social-proof__heading {
+      font-size: 30px;
+    }
+
+    .social-proof__follow {
+      font-size: 14px;
+    }
+
+    .social-proof__quote-wrap {
+      display: none;
+    }
+
+    .social-proof__ugc {
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+
+    .social-proof__ugc-item:nth-child(5) {
+      display: block;
+    }
+
+    .social-proof__ugc-item {
+      border-radius: 14px;
+      aspect-ratio: auto;
+      height: 200px;
+    }
   }
 {% endstylesheet %}
 
@@ -139,21 +204,32 @@
   "settings": [
     {
       "type": "text",
-      "id": "rating_summary",
-      "label": "t:labels.rating_summary",
-      "default": "4.9 from 300+ verified reviews"
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "#StinkSafe in the wild"
+    },
+    {
+      "type": "text",
+      "id": "follow_label",
+      "label": "t:labels.follow_label",
+      "default": "Follow @stinksafe →"
+    },
+    {
+      "type": "url",
+      "id": "follow_url",
+      "label": "t:labels.follow_url"
     },
     {
       "type": "textarea",
       "id": "review_text",
       "label": "t:labels.review_text",
-      "default": "Genuinely the only smell-proof bag I'd leave out on a shelf. The art's unreal and the seal actually works."
+      "info": "Optional — shown on mobile only. Leave blank to hide."
     },
     {
       "type": "text",
       "id": "reviewer_name",
       "label": "t:labels.reviewer_name",
-      "default": "Maya R. · Verified buyer"
+      "default": "Verified buyer"
     },
     {
       "type": "header",
@@ -178,6 +254,11 @@
       "type": "image_picker",
       "id": "ugc_image_4",
       "label": "t:labels.ugc_image_4"
+    },
+    {
+      "type": "image_picker",
+      "id": "ugc_image_5",
+      "label": "t:labels.ugc_image_5"
     }
   ],
   "presets": [

@@ -3,70 +3,70 @@
 -%}
 
 <div class="feat-products">
-  <div class="feat-products__header">
-    <h2 class="feat-products__heading">
-      {{- section.settings.heading | default: 'Featured packs' | escape -}}
-    </h2>
-    <a href="{{ see_all_url }}" class="feat-products__see-all">
-      {{- section.settings.see_all_text | default: 'Shop all' | escape -}}
-    </a>
-  </div>
+  <div class="feat-products__inner">
+    <div class="feat-products__header">
+      <h2 class="feat-products__heading">
+        {{- section.settings.heading | default: 'Featured packs' | escape -}}
+      </h2>
+      <a href="{{ see_all_url }}" class="feat-products__see-all">
+        {{- section.settings.see_all_text | default: 'See all →' | escape -}}
+      </a>
+    </div>
 
-  <div class="feat-products__scroll">
-    {%- if section.settings.collections != blank -%}
-      {%- for col in section.settings.collections -%}
-        {%- liquid
-          assign card_accent = '#2463EB'
-          assign col_h = col.handle
-          if col_h contains 'crimewave'
-            assign card_accent = '#F4A300'
-          elsif col_h contains 'snackverse'
-            assign card_accent = '#EC4899'
-          elsif col_h contains 'horror-highs' or col_h contains 'horror_highs'
-            assign card_accent = '#7C3AED'
-          elsif col_h contains 'horror-hotbox' or col_h contains 'horror_hotbox'
-            assign card_accent = '#991B1B'
-          endif
-          assign featured = col.products.first
-        -%}
-        {%- if featured -%}
+    <div class="feat-products__scroll">
+      {%- if section.settings.collections != blank -%}
+        {%- for col in section.settings.collections -%}
+          {%- liquid
+            assign card_accent = '#2463EB'
+            assign col_h = col.handle
+            if col_h contains 'crimewave'
+              assign card_accent = '#F4A300'
+            elsif col_h contains 'snackverse'
+              assign card_accent = '#EC4899'
+            elsif col_h contains 'horror-highs' or col_h contains 'horror_highs'
+              assign card_accent = '#7C3AED'
+            elsif col_h contains 'horror-hotbox' or col_h contains 'horror_hotbox'
+              assign card_accent = '#991B1B'
+            endif
+            assign featured = col.products.first
+          -%}
+          {%- if featured -%}
+            <div class="feat-products__item">
+              {%- render 'product-card', product: featured, accent: card_accent, badge_text: col.title -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- assign ph_titles = 'Cartoon Crimewave,Snackverse,Horror Highs,Horror Hotbox' | split: ',' -%}
+        {%- assign ph_accents = '#F4A300,#EC4899,#7C3AED,#991B1B' | split: ',' -%}
+        {%- assign ph_statuses = 'New,In stock,Last few,In stock' | split: ',' -%}
+        {%- for ph_title in ph_titles -%}
+          {%- assign ph_accent = ph_accents[forloop.index0] -%}
+          {%- assign ph_status = ph_statuses[forloop.index0] -%}
+          {%- assign ph_status_color = '#16A34A' -%}
+          {%- if ph_status == 'Last few' -%}{%- assign ph_status_color = '#E0472C' -%}{%- endif -%}
+          {%- if ph_status == 'New' -%}{%- assign ph_status_color = '#2463EB' -%}{%- endif -%}
           <div class="feat-products__item">
-            {%- render 'product-card', product: featured, accent: card_accent, badge_text: col.title -%}
-          </div>
-        {%- endif -%}
-      {%- endfor -%}
-    {%- else -%}
-      {%- assign ph_titles = 'Cartoon Crimewave,Snackverse,Horror Highs,Horror Hotbox' | split: ',' -%}
-      {%- assign ph_accents = '#F4A300,#EC4899,#7C3AED,#991B1B' | split: ',' -%}
-      {%- assign ph_statuses = 'In stock,In stock,Last few,In stock' | split: ',' -%}
-      {%- for ph_title in ph_titles -%}
-        {%- assign ph_accent = ph_accents[forloop.index0] -%}
-        {%- assign ph_status = ph_statuses[forloop.index0] -%}
-        {%- assign ph_status_color = '#16A34A' -%}
-        {%- if ph_status == 'Last few' -%}{%- assign ph_status_color = '#E0472C' -%}{%- endif -%}
-        <div class="feat-products__item">
-          <div class="product-card product-card--placeholder">
-            <div
-              class="product-card__art"
-              style="background: repeating-linear-gradient(135deg, {{ ph_accent }}26, {{ ph_accent }}26 7px, {{ ph_accent }}0d 7px, {{ ph_accent }}0d 14px); border: 1px dashed {{ ph_accent }}70;"
-            >
-              <span class="product-card__art-lbl" style="color: {{ ph_accent }}">{{- ph_title | escape -}}&nbsp;art</span>
-              <span class="product-card__badge" style="background: {{ ph_accent }}">{{- ph_title | split: ' ' | last | escape -}}</span>
-              <span class="product-card__status" style="color: {{ ph_status_color }}; border-color: {{ ph_status_color }}">{{- ph_status -}}</span>
-            </div>
-            <p class="product-card__title">{{- ph_title | escape -}}</p>
-            <p class="product-card__sub">6 designs</p>
-            <div class="product-card__foot">
-              <div>
-                <div class="product-card__rating">★ 4.9</div>
-                <div class="product-card__price">£12</div>
+            <div class="product-card product-card--placeholder">
+              <div
+                class="product-card__art"
+                style="background: repeating-linear-gradient(135deg, {{ ph_accent }}26, {{ ph_accent }}26 7px, {{ ph_accent }}0d 7px, {{ ph_accent }}0d 14px); border: 1px dashed {{ ph_accent }}70;"
+              >
+                <span class="product-card__art-lbl" style="color: {{ ph_accent }}">{{- ph_title | escape -}}&nbsp;art</span>
+                <span class="product-card__badge" style="background: {{ ph_accent }}">{{- ph_title | split: ' ' | last | escape -}}</span>
+                <span class="product-card__status" style="color: {{ ph_status_color }}; border-color: {{ ph_status_color }}">{{- ph_status -}}</span>
               </div>
-              <span class="product-card__add">＋</span>
+              <p class="product-card__title">{{- ph_title | escape -}}</p>
+              <p class="product-card__sub">{{ 'products.designs_count' | t: count: 6 }}</p>
+              <div class="product-card__foot">
+                <p class="product-card__price">from £4.99</p>
+                <span class="product-card__add" aria-hidden="true">＋</span>
+              </div>
             </div>
           </div>
-        </div>
-      {%- endfor -%}
-    {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
   </div>
 </div>
 
@@ -74,57 +74,86 @@
   .feat-products {
     padding: 10px 0 6px;
   }
+
+  .feat-products__inner {
+    /* mobile: no wrapper, page grid provides gutters */
+  }
+
   .feat-products__header {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    padding: 0 var(--page-gutter);
-    margin-bottom: 12px;
+    margin-bottom: 14px;
   }
+
   .feat-products__heading {
     font-family: var(--font-display);
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 800;
     line-height: 1;
     color: var(--color-ink);
     margin: 0;
+    letter-spacing: -0.01em;
   }
+
   .feat-products__see-all {
     font-family: var(--font-body);
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--color-blue);
     text-decoration: none;
+    white-space: nowrap;
   }
+
   .feat-products__scroll {
     display: flex;
     gap: 12px;
     overflow-x: auto;
-    padding: 0 var(--page-gutter) 6px;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    padding-bottom: 6px;
   }
+
   .feat-products__scroll::-webkit-scrollbar { display: none; }
+
   .feat-products__item {
     flex: 0 0 auto;
     width: 150px;
   }
+
   .product-card--placeholder {
     cursor: default;
   }
-  @media (min-width: 640px) {
+
+  @media (min-width: 768px) {
+    .feat-products {
+      padding: 0;
+    }
+
+    .feat-products__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 44px 40px 8px;
+    }
+
+    .feat-products__heading {
+      font-size: 30px;
+    }
+
+    .feat-products__see-all {
+      font-size: 14px;
+    }
+
     .feat-products__scroll {
       overflow-x: visible;
-      flex-wrap: wrap;
-      gap: 16px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      padding-bottom: 0;
     }
+
     .feat-products__item {
-      flex: 1 1 0;
       width: auto;
-    }
-    .feat-products__item .product-card__art,
-    .feat-products__item .product-card--placeholder .product-card__art {
-      height: 220px;
     }
   }
 {% endstylesheet %}
@@ -143,7 +172,7 @@
       "type": "text",
       "id": "see_all_text",
       "label": "t:labels.see_all_text",
-      "default": "Shop all"
+      "default": "See all →"
     },
     {
       "type": "url",

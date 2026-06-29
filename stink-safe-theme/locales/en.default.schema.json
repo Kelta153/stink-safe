@@ -49,7 +49,12 @@
     "ugc_photos": "UGC photos",
     "bundles": "Bundles",
     "faq": "FAQ",
-    "wholesale": "Wholesale"
+    "wholesale": "Wholesale",
+    "lifestyle_band": "Lifestyle band",
+    "accessories_teaser": "Accessories — coming soon",
+    "brand_story": "Brand story",
+    "trust_band": "Trust band",
+    "hero_images": "Hero images"
   },
   "labels": {
     "alignment": "Alignment",
@@ -99,6 +104,7 @@
     "show_announcement": "Show announcement bar",
     "show_payment_icons": "Show payment icons",
     "show_volume_pricing": "Show volume pricing",
+    "show_proof_list": "Show feature checklist",
     "subheading": "Subheading",
     "tagline": "Tagline",
     "telegram_cta": "Telegram button label",
@@ -117,7 +123,24 @@
     "free_shipping_threshold": "Free shipping threshold",
     "question": "Question",
     "answer": "Answer",
-    "body": "Body text"
+    "body": "Body text",
+    "hero_image_main": "Main pack image",
+    "hero_image_pack": "Secondary pack image",
+    "hero_image_lifestyle": "Lifestyle image",
+    "follow_label": "Follow link text",
+    "follow_url": "Follow link URL",
+    "story_url": "About page link",
+    "item_1_image": "Image 1",
+    "item_1_title": "Caption 1 — title",
+    "item_1_sub": "Caption 1 — text",
+    "item_2_image": "Image 2",
+    "item_2_title": "Caption 2 — title",
+    "item_2_sub": "Caption 2 — text",
+    "item_3_image": "Image 3",
+    "item_3_title": "Caption 3 — title",
+    "item_3_sub": "Caption 3 — text",
+    "notify_me": "Notify me button label",
+    "ugc_image_5": "Photo 5"
   },
   "options": {
     "alignment": {

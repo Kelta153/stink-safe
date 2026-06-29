@@ -1,0 +1,264 @@
+<div class="acc-teaser">
+  <div class="acc-teaser__inner">
+    <div class="acc-teaser__card">
+
+      <div class="acc-teaser__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#2463EB" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 8 12 3 3 8v8l9 5 9-5z"/>
+          <path d="M3 8l9 5 9-5"/>
+          <path d="M12 13v8"/>
+        </svg>
+      </div>
+
+      <div class="acc-teaser__text">
+        <p class="acc-teaser__eyebrow">{{- section.settings.eyebrow | default: 'Coming soon' | escape -}}</p>
+        <h2 class="acc-teaser__heading">{{- section.settings.heading | default: 'Accessories' | escape -}}</h2>
+        <p class="acc-teaser__body">{{- section.settings.body | default: 'Jars, cases & activated-charcoal inserts — landing soon. Be first to know.' | escape -}}</p>
+      </div>
+
+      <div class="acc-teaser__form-wrap">
+        {%- form 'customer' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter,accessories-notify">
+          <div class="acc-teaser__row">
+            <input
+              class="acc-teaser__input"
+              type="email"
+              name="contact[email]"
+              placeholder="{{ section.settings.email_placeholder | default: 'Email address' | escape }}"
+              required
+              autocomplete="email"
+            >
+            <button class="acc-teaser__btn" type="submit">
+              {{- section.settings.notify_me | default: 'Notify me' | escape -}}
+            </button>
+          </div>
+          {%- if form.posted_successfully? -%}
+            <p class="acc-teaser__success" role="status">{{- 'sections.accessories_teaser.success' | t -}}</p>
+          {%- elsif form.errors -%}
+            <p class="acc-teaser__error" role="alert">{{- form.errors | default_errors -}}</p>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .acc-teaser {
+    padding: 16px 0 8px;
+  }
+
+  .acc-teaser__inner {
+    /* mobile: page grid gutters apply */
+  }
+
+  .acc-teaser__card {
+    border: 1.5px dashed #C7D2F2;
+    background: #F6F8FE;
+    border-radius: 20px;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .acc-teaser__icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: var(--color-mist);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+  }
+
+  .acc-teaser__icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .acc-teaser__eyebrow {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-blue);
+    margin: 0;
+  }
+
+  .acc-teaser__heading {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--color-ink);
+    margin: 6px 0 0;
+    letter-spacing: -0.01em;
+  }
+
+  .acc-teaser__body {
+    font-family: var(--font-body);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--color-slate);
+    margin: 5px 0 0;
+  }
+
+  .acc-teaser__row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .acc-teaser__input {
+    flex: 1;
+    background: var(--color-white);
+    border: 1px solid #C7D2F2;
+    border-radius: 11px;
+    padding: 13px 14px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--color-ink);
+    outline: none;
+    min-width: 0;
+  }
+
+  .acc-teaser__input::placeholder {
+    color: #9AA1AE;
+  }
+
+  .acc-teaser__input:focus {
+    border-color: var(--color-blue);
+  }
+
+  .acc-teaser__btn {
+    background: var(--color-blue);
+    color: var(--color-white);
+    border: none;
+    border-radius: 11px;
+    padding: 0 20px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    line-height: 1;
+  }
+
+  .acc-teaser__success {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-in-stock);
+    margin: 8px 0 0;
+  }
+
+  .acc-teaser__error {
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: var(--color-alert);
+    margin: 8px 0 0;
+  }
+
+  @media (min-width: 768px) {
+    .acc-teaser {
+      padding: 0;
+    }
+
+    .acc-teaser__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 40px 8px;
+    }
+
+    .acc-teaser__card {
+      flex-direction: row;
+      align-items: center;
+      gap: 32px;
+      padding: 40px;
+      border-radius: 22px;
+    }
+
+    .acc-teaser__icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+    }
+
+    .acc-teaser__icon svg {
+      width: 34px;
+      height: 34px;
+    }
+
+    .acc-teaser__text {
+      flex: 1;
+    }
+
+    .acc-teaser__heading {
+      font-size: 26px;
+    }
+
+    .acc-teaser__body {
+      font-size: 15px;
+    }
+
+    .acc-teaser__form-wrap {
+      flex: 0 0 auto;
+    }
+
+    .acc-teaser__input {
+      width: 220px;
+      font-size: 14px;
+    }
+
+    .acc-teaser__btn {
+      font-size: 14px;
+      padding: 0 24px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.accessories_teaser",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "Coming soon"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Accessories"
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "t:labels.body",
+      "default": "Jars, cases & activated-charcoal inserts — landing soon. Be first to know."
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "t:labels.tagline",
+      "default": "Email address"
+    },
+    {
+      "type": "text",
+      "id": "notify_me",
+      "label": "t:labels.notify_me",
+      "default": "Notify me"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.accessories_teaser"
+    }
+  ]
+}
+{% endschema %}

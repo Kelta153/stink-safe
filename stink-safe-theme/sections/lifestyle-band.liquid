@@ -1,0 +1,236 @@
+<div class="lifestyle">
+  <div class="lifestyle__inner">
+    <h2 class="lifestyle__heading">
+      {{- section.settings.heading | default: 'Built for real life' | escape -}}
+    </h2>
+
+    <div class="lifestyle__grid">
+
+      <div class="lifestyle__item">
+        {%- if section.settings.item_1_image != blank -%}
+          <div class="lifestyle__img-wrap">
+            {{ section.settings.item_1_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: section.settings.item_1_title | escape }}
+          </div>
+        {%- else -%}
+          <div class="lifestyle__img-wrap lifestyle__img-wrap--ph" style="background: repeating-linear-gradient(135deg, #2463EB1a, #2463EB1a 7px, transparent 7px, transparent 14px); border: 1px dashed #2463EB50;">
+            <span style="color: #2463EB; font-family: var(--font-label); font-size: 10px; font-weight: 700; text-transform: uppercase;">Travel · carry-on</span>
+          </div>
+        {%- endif -%}
+        <p class="lifestyle__caption-title">{{- section.settings.item_1_title | default: 'Goes anywhere' | escape -}}</p>
+        <p class="lifestyle__caption-sub">{{- section.settings.item_1_sub | default: 'Cabin bag, glovebox, festival kit.' | escape -}}</p>
+      </div>
+
+      <div class="lifestyle__item">
+        {%- if section.settings.item_2_image != blank -%}
+          <div class="lifestyle__img-wrap">
+            {{ section.settings.item_2_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: section.settings.item_2_title | escape }}
+          </div>
+        {%- else -%}
+          <div class="lifestyle__img-wrap lifestyle__img-wrap--ph" style="background: repeating-linear-gradient(135deg, #16A34A1a, #16A34A1a 7px, transparent 7px, transparent 14px); border: 1px dashed #16A34A50;">
+            <span style="color: #16A34A; font-family: var(--font-label); font-size: 10px; font-weight: 700; text-transform: uppercase;">Kitchen · pantry</span>
+          </div>
+        {%- endif -%}
+        <p class="lifestyle__caption-title">{{- section.settings.item_2_title | default: 'Kitchen & pantry' | escape -}}</p>
+        <p class="lifestyle__caption-sub">{{- section.settings.item_2_sub | default: 'Keep strong smells contained.' | escape -}}</p>
+      </div>
+
+      <div class="lifestyle__item">
+        {%- if section.settings.item_3_image != blank -%}
+          <div class="lifestyle__img-wrap">
+            {{ section.settings.item_3_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: section.settings.item_3_title | escape }}
+          </div>
+        {%- else -%}
+          <div class="lifestyle__img-wrap lifestyle__img-wrap--ph" style="background: repeating-linear-gradient(135deg, #F4A3001a, #F4A3001a 7px, transparent 7px, transparent 14px); border: 1px dashed #F4A30050;">
+            <span style="color: #F4A300; font-family: var(--font-label); font-size: 10px; font-weight: 700; text-transform: uppercase;">Gym bag · kit</span>
+          </div>
+        {%- endif -%}
+        <p class="lifestyle__caption-title">{{- section.settings.item_3_title | default: 'Gym & gear' | escape -}}</p>
+        <p class="lifestyle__caption-sub">{{- section.settings.item_3_sub | default: 'Sweaty kit stays separate.' | escape -}}</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .lifestyle {
+    padding: 24px 0 8px;
+  }
+
+  .lifestyle__inner {
+    /* mobile: page grid gutters apply */
+  }
+
+  .lifestyle__heading {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--color-ink);
+    letter-spacing: -0.01em;
+    margin: 0 0 16px;
+  }
+
+  .lifestyle__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .lifestyle__img-wrap {
+    border-radius: 16px;
+    overflow: hidden;
+    height: 200px;
+  }
+
+  .lifestyle__img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .lifestyle__img-wrap--ph {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lifestyle__caption-title {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-ink);
+    margin: 10px 0 0;
+  }
+
+  .lifestyle__caption-sub {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--color-ink-faint);
+    margin: 3px 0 0;
+  }
+
+  @media (min-width: 768px) {
+    .lifestyle {
+      padding: 0;
+    }
+
+    .lifestyle__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 40px 8px;
+    }
+
+    .lifestyle__heading {
+      font-size: 30px;
+      margin-bottom: 24px;
+    }
+
+    .lifestyle__grid {
+      flex-direction: row;
+      gap: 20px;
+    }
+
+    .lifestyle__item:first-child {
+      flex: 1.4;
+    }
+
+    .lifestyle__item:not(:first-child) {
+      flex: 1;
+    }
+
+    .lifestyle__img-wrap {
+      height: 300px;
+      border-radius: 18px;
+    }
+
+    .lifestyle__caption-title {
+      font-size: 15px;
+      margin-top: 12px;
+    }
+
+    .lifestyle__caption-sub {
+      font-size: 13px;
+      margin-top: 3px;
+      color: #7B8496;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.lifestyle_band",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Built for real life"
+    },
+    {
+      "type": "header",
+      "content": "t:general.content"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_1_image",
+      "label": "t:labels.item_1_image"
+    },
+    {
+      "type": "text",
+      "id": "item_1_title",
+      "label": "t:labels.item_1_title",
+      "default": "Goes anywhere"
+    },
+    {
+      "type": "text",
+      "id": "item_1_sub",
+      "label": "t:labels.item_1_sub",
+      "default": "Cabin bag, glovebox, festival kit."
+    },
+    {
+      "type": "image_picker",
+      "id": "item_2_image",
+      "label": "t:labels.item_2_image"
+    },
+    {
+      "type": "text",
+      "id": "item_2_title",
+      "label": "t:labels.item_2_title",
+      "default": "Kitchen & pantry"
+    },
+    {
+      "type": "text",
+      "id": "item_2_sub",
+      "label": "t:labels.item_2_sub",
+      "default": "Keep strong smells contained."
+    },
+    {
+      "type": "image_picker",
+      "id": "item_3_image",
+      "label": "t:labels.item_3_image"
+    },
+    {
+      "type": "text",
+      "id": "item_3_title",
+      "label": "t:labels.item_3_title",
+      "default": "Gym & gear"
+    },
+    {
+      "type": "text",
+      "id": "item_3_sub",
+      "label": "t:labels.item_3_sub",
+      "default": "Sweaty kit stays separate."
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.lifestyle_band"
+    }
+  ]
+}
+{% endschema %}

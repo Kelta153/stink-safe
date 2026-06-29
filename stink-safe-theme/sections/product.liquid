@@ -1,5 +1,6 @@
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
+
   assign has_only_default_variant = false
   if product.has_only_default_variant
     assign has_only_default_variant = true
@@ -15,16 +16,42 @@
   elsif product.tags contains 'horror-hotbox'
     assign product_accent = '#991B1B'
   endif
+
+  assign col_name = nil
+  if product.tags contains 'crimewave'
+    assign col_name = 'Crimewave'
+  elsif product.tags contains 'snackverse'
+    assign col_name = 'Snackverse'
+  elsif product.tags contains 'horror-highs'
+    assign col_name = 'Horror Highs'
+  elsif product.tags contains 'horror-hotbox'
+    assign col_name = 'Horror Hotbox'
+  endif
+
+  assign tagline = product.metafields.custom.tagline.value
+  if tagline == blank
+    if col_name == 'Crimewave'
+      assign tagline = 'Pull off the perfect stash.'
+    elsif col_name == 'Snackverse'
+      assign tagline = 'Snacks. In space. Sealed tight.'
+    elsif col_name == 'Horror Highs'
+      assign tagline = 'The scariest thing is how good it looks.'
+    elsif col_name == 'Horror Hotbox'
+      assign tagline = 'Lock the door. Seal the bag.'
+    endif
+  endif
+
+  assign issue_range = product.metafields.custom.issue_range.value | default: 'ISSUE 01–06'
 -%}
 
 <div class="pdp">
 
-  {%- comment -%} ─── GALLERY ─────────────────────────────────────────────── {%- endcomment -%}
+  {%- comment -%} ─── GALLERY ────────────────────────────────────────────── {%- endcomment -%}
   <div class="pdp__gallery">
 
     <div class="pdp__main-img" id="pdp-main-img">
       {%- if product.featured_image -%}
-        {{ product.featured_image | image_url: width: 800 | image_tag:
+        {{ product.featured_image | image_url: width: 900 | image_tag:
           loading: 'eager',
           fetchpriority: 'high',
           alt: product.title,
@@ -38,6 +65,7 @@
           aria-hidden="true"
         ></div>
       {%- endif -%}
+      <span class="pdp__zoom-hint" aria-hidden="true">{{ 'products.gallery.zoom_hint' | t }}</span>
     </div>
 
     {%- if product.images.size > 1 -%}
@@ -46,17 +74,12 @@
           <button
             class="pdp__thumb{% if forloop.first %} pdp__thumb--active{% endif %}"
             type="button"
-            data-src="{{ img | image_url: width: 800 }}"
+            data-src="{{ img | image_url: width: 900 }}"
             data-thumb-index="{{ forloop.index0 }}"
             aria-label="{{ 'products.gallery.view_image' | t: index: forloop.index }}"
             role="listitem"
           >
-            {{ img | image_url: width: 104 | image_tag:
-              loading: 'lazy',
-              alt: product.title,
-              width: 52,
-              height: 52
-            }}
+            {{ img | image_url: width: 160 | image_tag: loading: 'lazy', alt: product.title }}
           </button>
         {%- endfor -%}
       </div>
@@ -64,342 +87,441 @@
 
   </div>
 
-  {%- comment -%} ─── INFO PANEL ──────────────────────────────────────────── {%- endcomment -%}
-  <div class="pdp__info">
+  {%- comment -%} ─── RIGHT COLUMN ────────────────────────────────────────── {%- endcomment -%}
+  <div class="pdp__right">
 
-    {%- if product.vendor != blank -%}
-      <p class="pdp__vendor">{{- product.vendor | escape -}}</p>
-    {%- endif -%}
+    {%- comment -%} ─── BUY-BOX CARD ───────────────────────────────────────── {%- endcomment -%}
+    <div class="pdp__buybox">
 
-    <h1 class="pdp__title">{{- product.title | escape -}}</h1>
+      {%- if col_name != blank -%}
+        <p class="pdp__eyebrow" style="--accent: {{ product_accent }}">
+          <span>{{- col_name | escape -}}</span>
+          <span class="pdp__eyebrow-dot" aria-hidden="true">·</span>
+          <span>{{- issue_range | escape -}}</span>
+        </p>
+      {%- elsif product.vendor != blank -%}
+        <p class="pdp__eyebrow" style="--accent: {{ product_accent }}">{{- product.vendor | escape -}}</p>
+      {%- endif -%}
 
-    <div class="pdp__meta-row">
-      <span class="pdp__rating" aria-label="{{ 'products.rating.aria' | t: score: '4.9' }}">
-        <span class="pdp__stars" aria-hidden="true">★★★★★</span>
-        <span class="pdp__rating-num">4.9</span>
-      </span>
-      <span class="pdp__meta-dot" aria-hidden="true">·</span>
-      <span class="pdp__designs">{{ 'products.designs_count' | t: count: 6 }}</span>
-    </div>
+      <h1 class="pdp__title">{{- product.title | escape -}}</h1>
 
-    {%- comment -%} ─── PRODUCT FORM ─────────────────────────────────────── {%- endcomment -%}
-    {% form 'product', product, id: 'pdp-form', data-product-id: product.id %}
+      {%- if tagline != blank -%}
+        <p class="pdp__tagline">{{- tagline | escape -}}</p>
+      {%- endif -%}
 
-      {%- comment -%} Variant hidden input — updated by JS {%- endcomment -%}
-      <input
-        type="hidden"
-        name="id"
-        id="pdp-variant-id"
-        value="{{ current_variant.id }}"
-      >
+      {%- comment -%} ─── PRODUCT FORM ─────────────────────────────────────── {%- endcomment -%}
+      {% form 'product', product, id: 'pdp-form', data-product-id: product.id %}
 
-      {%- comment -%} ─── PRICE ROW ─────────────────────────────────────── {%- endcomment -%}
-      <div class="pdp__price-row" id="pdp-price-row">
-        <span class="pdp__price" id="pdp-price">
-          {{- current_variant.price | money_without_trailing_zeros -}}
-        </span>
-        {%- if current_variant.compare_at_price > current_variant.price -%}
-          <span class="pdp__compare" id="pdp-compare">
-            {{- current_variant.compare_at_price | money_without_trailing_zeros -}}
+        <input type="hidden" name="id" id="pdp-variant-id" value="{{ current_variant.id }}">
+
+        {%- comment -%} ─── PRICE ──────────────────────────────────────────── {%- endcomment -%}
+        <div class="pdp__price-row" id="pdp-price-row">
+          <span class="pdp__price" id="pdp-price">
+            {{- current_variant.price | money_without_trailing_zeros -}}
           </span>
-          {%- assign save_pct = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price -%}
-          <span class="pdp__save-badge" id="pdp-save-badge">
-            {{ 'products.save_percent' | t: percent: save_pct }}
-          </span>
-        {%- else -%}
-          <span class="pdp__compare pdp__compare--hidden" id="pdp-compare"></span>
-          <span class="pdp__save-badge pdp__save-badge--hidden" id="pdp-save-badge"></span>
-        {%- endif -%}
-      </div>
+          {%- if current_variant.compare_at_price > current_variant.price -%}
+            <span class="pdp__compare" id="pdp-compare">
+              {{- current_variant.compare_at_price | money_without_trailing_zeros -}}
+            </span>
+            {%- assign save_pct = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price -%}
+            <span class="pdp__save-badge" id="pdp-save-badge">
+              {{ 'products.save_percent' | t: percent: save_pct }}
+            </span>
+          {%- else -%}
+            <span class="pdp__compare pdp__compare--hidden" id="pdp-compare"></span>
+            <span class="pdp__save-badge pdp__save-badge--hidden" id="pdp-save-badge"></span>
+          {%- endif -%}
+        </div>
 
-      {%- comment -%} ─── VARIANT PILLS ─────────────────────────────────── {%- endcomment -%}
-      {%- unless has_only_default_variant -%}
-        <div class="pdp__variants" id="pdp-variants">
-          {%- for option in product.options_with_values -%}
-            <div class="pdp__option-group">
-              <p class="pdp__option-label">
-                {{- option.name | escape -}}
-              </p>
-              <div class="pdp__pills" role="group" aria-label="{{ option.name | escape }}">
-                {%- for value in option.values -%}
-                  {%- liquid
-                    assign option_index = forloop.parentloop.index0
-                    assign is_selected = false
+        {%- comment -%} ─── VARIANTS / TIERS ──────────────────────────────── {%- endcomment -%}
+        {%- unless has_only_default_variant -%}
+          <div class="pdp__variants" id="pdp-variants">
+            {%- for option in product.options_with_values -%}
+              {%- liquid
+                assign option_index = forloop.index0
+                assign option_name_lower = option.name | downcase
+
+                assign is_qty_option = false
+                if option_name_lower == 'quantity'
+                  assign is_qty_option = true
+                elsif option_name_lower == 'pack size'
+                  assign is_qty_option = true
+                elsif option_name_lower == 'pack'
+                  assign is_qty_option = true
+                endif
+
+                assign base_qty = option.values.first | plus: 0
+                assign base_per_bag = 0
+                if base_qty > 0
+                  for v in product.variants
                     if option_index == 0
-                      if current_variant.option1 == value
-                        assign is_selected = true
+                      if v.option1 == option.values.first
+                        assign base_per_bag = v.price | divided_by: base_qty
+                        break
                       endif
                     elsif option_index == 1
-                      if current_variant.option2 == value
-                        assign is_selected = true
+                      if v.option2 == option.values.first
+                        assign base_per_bag = v.price | divided_by: base_qty
+                        break
                       endif
                     elsif option_index == 2
-                      if current_variant.option3 == value
-                        assign is_selected = true
+                      if v.option3 == option.values.first
+                        assign base_per_bag = v.price | divided_by: base_qty
+                        break
                       endif
                     endif
+                  endfor
+                endif
+              -%}
 
-                    assign is_sold_out = true
-                    for variant in product.variants
-                      if option_index == 0
-                        if variant.option1 == value
-                          if variant.available
-                            assign is_sold_out = false
+              <div class="pdp__option-group">
+                <p class="pdp__option-label">{{- option.name | escape -}}</p>
+
+                {%- if is_qty_option -%}
+                  <div class="pdp__tiers" role="group" aria-label="{{ option.name | escape }}">
+                    {%- for value in option.values -%}
+                      {%- liquid
+                        assign is_selected = false
+                        if option_index == 0
+                          if current_variant.option1 == value
+                            assign is_selected = true
+                          endif
+                        elsif option_index == 1
+                          if current_variant.option2 == value
+                            assign is_selected = true
+                          endif
+                        elsif option_index == 2
+                          if current_variant.option3 == value
+                            assign is_selected = true
                           endif
                         endif
-                      elsif option_index == 1
-                        if variant.option2 == value
-                          if variant.available
-                            assign is_sold_out = false
+
+                        assign is_sold_out = true
+                        for variant in product.variants
+                          if option_index == 0
+                            if variant.option1 == value
+                              if variant.available
+                                assign is_sold_out = false
+                              endif
+                            endif
+                          elsif option_index == 1
+                            if variant.option2 == value
+                              if variant.available
+                                assign is_sold_out = false
+                              endif
+                            endif
+                          elsif option_index == 2
+                            if variant.option3 == value
+                              if variant.available
+                                assign is_sold_out = false
+                              endif
+                            endif
+                          endif
+                        endfor
+
+                        assign qty_int = value | plus: 0
+                        assign tier_variant = nil
+                        for v in product.variants
+                          if option_index == 0
+                            if v.option1 == value
+                              assign tier_variant = v
+                              break
+                            endif
+                          elsif option_index == 1
+                            if v.option2 == value
+                              assign tier_variant = v
+                              break
+                            endif
+                          elsif option_index == 2
+                            if v.option3 == value
+                              assign tier_variant = v
+                              break
+                            endif
+                          endif
+                        endfor
+
+                        assign per_bag_pence = 0
+                        if qty_int > 0
+                          if tier_variant != nil
+                            assign per_bag_pence = tier_variant.price | divided_by: qty_int
                           endif
                         endif
-                      elsif option_index == 2
-                        if variant.option3 == value
-                          if variant.available
-                            assign is_sold_out = false
+
+                        assign tier_save_pct = 0
+                        if base_per_bag > 0
+                          if per_bag_pence > 0
+                            if per_bag_pence < base_per_bag
+                              assign tier_save_pct = base_per_bag | minus: per_bag_pence | times: 100 | divided_by: base_per_bag
+                            endif
                           endif
                         endif
-                      endif
-                    endfor
-                  -%}
-                  <label
-                    class="pdp__pill{% if is_selected %} pdp__pill--active{% endif %}{% if is_sold_out %} pdp__pill--soldout{% endif %}"
-                    data-option-index="{{ option_index }}"
-                    data-option-value="{{ value | escape }}"
-                  >
-                    <input
-                      class="sr-only"
-                      type="radio"
-                      name="option-{{ option_index }}"
-                      value="{{ value | escape }}"
-                      {% if is_selected %}checked="checked"{% endif %}
-                      {% if is_sold_out %}aria-label="{{ value | escape }} — {{ 'products.sold_out' | t }}"{% endif %}
-                    >
-                    {{- value | escape -}}
-                  </label>
-                {%- endfor -%}
+                      -%}
+                      <label
+                        class="pdp__pill pdp__tier{% if is_selected %} pdp__pill--active{% endif %}{% if is_sold_out %} pdp__pill--soldout{% endif %}"
+                        data-option-index="{{ option_index }}"
+                        data-option-value="{{ value | escape }}"
+                      >
+                        <input
+                          class="sr-only"
+                          type="radio"
+                          name="option-{{ option_index }}"
+                          value="{{ value | escape }}"
+                          {% if is_selected %}checked="checked"{% endif %}
+                        >
+                        <span class="pdp__tier-qty">{{ value | escape }}</span>
+                        {%- if tier_variant != nil -%}
+                          <span class="pdp__tier-price">{{ tier_variant.price | money_without_trailing_zeros }}</span>
+                          {%- if per_bag_pence > 0 -%}
+                            <span class="pdp__tier-per">{{ per_bag_pence | money }}/bag</span>
+                          {%- endif -%}
+                        {%- endif -%}
+                        {%- if tier_save_pct > 0 -%}
+                          <span class="pdp__tier-save">{{ 'products.save_percent' | t: percent: tier_save_pct }}</span>
+                        {%- endif -%}
+                      </label>
+                    {%- endfor -%}
+                  </div>
+
+                {%- else -%}
+                  <div class="pdp__pills" role="group" aria-label="{{ option.name | escape }}">
+                    {%- for value in option.values -%}
+                      {%- liquid
+                        assign is_selected = false
+                        if option_index == 0
+                          if current_variant.option1 == value
+                            assign is_selected = true
+                          endif
+                        elsif option_index == 1
+                          if current_variant.option2 == value
+                            assign is_selected = true
+                          endif
+                        elsif option_index == 2
+                          if current_variant.option3 == value
+                            assign is_selected = true
+                          endif
+                        endif
+
+                        assign is_sold_out = true
+                        for variant in product.variants
+                          if option_index == 0
+                            if variant.option1 == value
+                              if variant.available
+                                assign is_sold_out = false
+                              endif
+                            endif
+                          elsif option_index == 1
+                            if variant.option2 == value
+                              if variant.available
+                                assign is_sold_out = false
+                              endif
+                            endif
+                          elsif option_index == 2
+                            if variant.option3 == value
+                              if variant.available
+                                assign is_sold_out = false
+                              endif
+                            endif
+                          endif
+                        endfor
+                      -%}
+                      <label
+                        class="pdp__pill{% if is_selected %} pdp__pill--active{% endif %}{% if is_sold_out %} pdp__pill--soldout{% endif %}"
+                        data-option-index="{{ option_index }}"
+                        data-option-value="{{ value | escape }}"
+                      >
+                        <input
+                          class="sr-only"
+                          type="radio"
+                          name="option-{{ option_index }}"
+                          value="{{ value | escape }}"
+                          {% if is_selected %}checked="checked"{% endif %}
+                          {% if is_sold_out %}aria-label="{{ value | escape }} — {{ 'products.sold_out' | t }}"{% endif %}
+                        >
+                        {{- value | escape -}}
+                      </label>
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+
               </div>
-            </div>
+            {%- endfor -%}
+          </div>
+        {%- endunless -%}
+
+        {%- comment -%} ─── QTY + ATC ────────────────────────────────────── {%- endcomment -%}
+        <div class="pdp__atc-row">
+          <div class="pdp__qty" role="group" aria-label="{{ 'products.quantity.label' | t }}">
+            <button class="pdp__qty-btn" type="button" id="pdp-qty-minus" aria-label="{{ 'products.quantity.decrease' | t }}">
+              <svg width="14" height="2" viewBox="0 0 14 2" fill="none" aria-hidden="true">
+                <rect x="0" y="0" width="14" height="2" rx="1" fill="currentColor"/>
+              </svg>
+            </button>
+            <input
+              class="pdp__qty-input"
+              type="number"
+              name="quantity"
+              id="pdp-qty"
+              value="1"
+              min="1"
+              max="99"
+              aria-label="{{ 'products.quantity.label' | t }}"
+            >
+            <button class="pdp__qty-btn" type="button" id="pdp-qty-plus" aria-label="{{ 'products.quantity.increase' | t }}">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <rect x="6" y="0" width="2" height="14" rx="1" fill="currentColor"/>
+                <rect x="0" y="6" width="14" height="2" rx="1" fill="currentColor"/>
+              </svg>
+            </button>
+          </div>
+          <button
+            class="pdp__atc"
+            type="submit"
+            name="add"
+            id="pdp-atc"
+            data-add-text="{{ 'products.add_to_cart' | t | escape }}"
+            data-soldout-text="{{ 'products.sold_out' | t | escape }}"
+            data-added-text="{{ 'products.added' | t | escape }}"
+            {% unless current_variant.available %}disabled="disabled"{% endunless %}
+          >
+            <span id="pdp-atc-text">
+              {%- if current_variant.available -%}
+                {{- 'products.add_to_cart' | t -}} · {{- current_variant.price | money_without_trailing_zeros -}}
+              {%- else -%}
+                {{- 'products.sold_out' | t -}}
+              {%- endif -%}
+            </span>
+          </button>
+        </div>
+
+      {% endform %}
+
+      {%- comment -%} ─── DISCREET ─────────────────────────────────────────── {%- endcomment -%}
+      <p class="pdp__discreet">
+        <svg class="pdp__lock-icon" width="12" height="14" viewBox="0 0 12 14" fill="none" aria-hidden="true">
+          <rect x="1" y="6" width="10" height="8" rx="2" fill="currentColor" opacity="0.15"/>
+          <rect x="1" y="6" width="10" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M3.5 6V4.5a2.5 2.5 0 0 1 5 0V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="6" cy="10" r="1" fill="currentColor"/>
+        </svg>
+        {{ 'products.discreet_shipping' | t }}
+      </p>
+
+      {%- comment -%} ─── PROOF CHECKLIST ──────────────────────────────────── {%- endcomment -%}
+      {%- if section.settings.show_proof_list -%}
+        <ul class="pdp__proof" aria-label="{{ 'products.proof.aria' | t }}">
+          {%- assign proof_items = 'products.proof.odour_barrier,products.proof.airtight_seal,products.proof.plain_parcels,products.proof.durable' | split: ',' -%}
+          {%- for item_key in proof_items -%}
+            <li>
+              <svg viewBox="0 0 16 16" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M2 8l4 4 8-8"/>
+              </svg>
+              {{ item_key | t }}
+            </li>
           {%- endfor -%}
-        </div>
-      {%- endunless -%}
+        </ul>
+      {%- endif -%}
 
-      {%- comment -%} ─── QTY + ADD TO CART ─────────────────────────────── {%- endcomment -%}
-      <div class="pdp__atc-row">
-        <div class="pdp__qty" role="group" aria-label="{{ 'products.quantity.label' | t }}">
-          <button
-            class="pdp__qty-btn"
-            type="button"
-            id="pdp-qty-minus"
-            aria-label="{{ 'products.quantity.decrease' | t }}"
-          >
-            <svg width="14" height="2" viewBox="0 0 14 2" fill="none" aria-hidden="true">
-              <rect x="0" y="0" width="14" height="2" rx="1" fill="currentColor"/>
-            </svg>
-          </button>
-          <input
-            class="pdp__qty-input"
-            type="number"
-            name="quantity"
-            id="pdp-qty"
-            value="1"
-            min="1"
-            max="99"
-            aria-label="{{ 'products.quantity.label' | t }}"
-          >
-          <button
-            class="pdp__qty-btn"
-            type="button"
-            id="pdp-qty-plus"
-            aria-label="{{ 'products.quantity.increase' | t }}"
-          >
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-              <rect x="6" y="0" width="2" height="14" rx="1" fill="currentColor"/>
-              <rect x="0" y="6" width="14" height="2" rx="1" fill="currentColor"/>
-            </svg>
-          </button>
-        </div>
-
-        <button
-          class="pdp__atc btn btn--primary"
-          type="submit"
-          name="add"
-          id="pdp-atc"
-          data-add-text="{{ 'products.add_to_cart' | t | escape }}"
-          data-soldout-text="{{ 'products.sold_out' | t | escape }}"
-          data-added-text="{{ 'products.added' | t | escape }}"
-          {% unless current_variant.available %}disabled="disabled"{% endunless %}
-        >
-          <span class="pdp__atc-text" id="pdp-atc-text">
-            {%- if current_variant.available -%}
-              {{- 'products.add_to_cart' | t -}}
-            {%- else -%}
-              {{- 'products.sold_out' | t -}}
-            {%- endif -%}
-          </span>
-        </button>
-      </div>
-
-    {% endform %}
-
-    {%- comment -%} ─── DISCREET SHIPPING NOTE ────────────────────────────── {%- endcomment -%}
-    <p class="pdp__discreet">
-      <svg class="pdp__lock-icon" width="12" height="14" viewBox="0 0 12 14" fill="none" aria-hidden="true">
-        <rect x="1" y="6" width="10" height="8" rx="2" fill="currentColor" opacity="0.15"/>
-        <rect x="1" y="6" width="10" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/>
-        <path d="M3.5 6V4.5a2.5 2.5 0 0 1 5 0V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        <circle cx="6" cy="10" r="1" fill="currentColor"/>
-      </svg>
-      {{ 'products.discreet_shipping' | t }}
-    </p>
-
-    {%- comment -%} ─── VOLUME PRICING ──────────────────────────────────────── {%- endcomment -%}
-    {%- if section.settings.show_volume_pricing -%}
-      <div class="pdp__volume">
-        <button
-          class="pdp__volume-toggle"
-          type="button"
-          id="pdp-volume-toggle"
-          aria-expanded="false"
-          aria-controls="pdp-volume-table"
-        >
-          <span class="pdp__volume-label">{{ 'products.volume_pricing.title' | t }}</span>
-          <svg class="pdp__chevron" width="14" height="9" viewBox="0 0 14 9" fill="none" aria-hidden="true">
-            <path d="M1 1l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <div class="pdp__volume-body" id="pdp-volume-table" hidden>
-          <table class="pdp__vol-table" aria-label="{{ 'products.volume_pricing.title' | t }}">
-            <thead>
-              <tr>
-                <th scope="col">{{ 'products.volume_pricing.qty' | t }}</th>
-                <th scope="col">{{ 'products.volume_pricing.price' | t }}</th>
-                <th scope="col">{{ 'products.volume_pricing.per_bag' | t }}</th>
-                <th scope="col">{{ 'products.volume_pricing.save' | t }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>6</td>
-                <td>£4.99</td>
-                <td>£0.83</td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>25</td>
-                <td>£6.99</td>
-                <td>£0.28</td>
-                <td class="pdp__vol-save">{{ 'products.volume_pricing.save_pct' | t: percent: 66 }}</td>
-              </tr>
-              <tr>
-                <td>50</td>
-                <td>£9.99</td>
-                <td>£0.20</td>
-                <td class="pdp__vol-save">{{ 'products.volume_pricing.save_pct' | t: percent: 76 }}</td>
-              </tr>
-              <tr>
-                <td>100</td>
-                <td>£13.99</td>
-                <td>£0.14</td>
-                <td class="pdp__vol-save">{{ 'products.volume_pricing.save_pct' | t: percent: 83 }}</td>
-              </tr>
-              <tr>
-                <td>200</td>
-                <td>£22.99</td>
-                <td>£0.11</td>
-                <td class="pdp__vol-save">{{ 'products.volume_pricing.save_pct' | t: percent: 86 }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    {%- endif -%}
-
-    {%- comment -%} ─── SPEC ACCORDION ──────────────────────────────────────── {%- endcomment -%}
-    <div class="pdp__specs">
-      <details class="pdp__spec">
-        <summary class="pdp__spec-summary">
-          <span class="pdp__spec-title">{{ 'products.spec.smell.title' | t }}</span>
-          <svg class="pdp__spec-chevron" width="14" height="9" viewBox="0 0 14 9" fill="none" aria-hidden="true">
-            <path d="M1 1l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </summary>
-        <div class="pdp__spec-body">
-          <p>{{ 'products.spec.smell.body' | t }}</p>
-        </div>
-      </details>
-
-      <details class="pdp__spec">
-        <summary class="pdp__spec-summary">
-          <span class="pdp__spec-title">{{ 'products.spec.dimensions.title' | t }}</span>
-          <svg class="pdp__spec-chevron" width="14" height="9" viewBox="0 0 14 9" fill="none" aria-hidden="true">
-            <path d="M1 1l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </summary>
-        <div class="pdp__spec-body">
-          <p>{{ 'products.spec.dimensions.body' | t }}</p>
-        </div>
-      </details>
-
-      <details class="pdp__spec">
-        <summary class="pdp__spec-summary">
-          <span class="pdp__spec-title">{{ 'products.spec.shipping.title' | t }}</span>
-          <svg class="pdp__spec-chevron" width="14" height="9" viewBox="0 0 14 9" fill="none" aria-hidden="true">
-            <path d="M1 1l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </summary>
-        <div class="pdp__spec-body">
-          <p>{{ 'products.spec.shipping.body' | t }}</p>
-        </div>
-      </details>
     </div>
 
-    {%- comment -%} ─── DESCRIPTION ─────────────────────────────────────────── {%- endcomment -%}
-    {%- if product.description != blank -%}
-      <div class="pdp__desc rte">
-        {{ product.description }}
+    {%- comment -%} ─── BELOW FOLD ───────────────────────────────────────────── {%- endcomment -%}
+    <div class="pdp__below">
+
+      <div class="pdp__specs">
+        <details class="pdp__spec">
+          <summary class="pdp__spec-summary">
+            <span class="pdp__spec-title">{{ 'products.spec.smell.title' | t }}</span>
+            <svg class="pdp__spec-chevron" width="14" height="9" viewBox="0 0 14 9" fill="none" aria-hidden="true">
+              <path d="M1 1l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </summary>
+          <div class="pdp__spec-body"><p>{{ 'products.spec.smell.body' | t }}</p></div>
+        </details>
+
+        <details class="pdp__spec">
+          <summary class="pdp__spec-summary">
+            <span class="pdp__spec-title">{{ 'products.spec.dimensions.title' | t }}</span>
+            <svg class="pdp__spec-chevron" width="14" height="9" viewBox="0 0 14 9" fill="none" aria-hidden="true">
+              <path d="M1 1l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </summary>
+          <div class="pdp__spec-body"><p>{{ 'products.spec.dimensions.body' | t }}</p></div>
+        </details>
+
+        <details class="pdp__spec">
+          <summary class="pdp__spec-summary">
+            <span class="pdp__spec-title">{{ 'products.spec.shipping.title' | t }}</span>
+            <svg class="pdp__spec-chevron" width="14" height="9" viewBox="0 0 14 9" fill="none" aria-hidden="true">
+              <path d="M1 1l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </summary>
+          <div class="pdp__spec-body"><p>{{ 'products.spec.shipping.body' | t }}</p></div>
+        </details>
       </div>
-    {%- endif -%}
 
-  </div>{%- comment -%} /pdp__info {%- endcomment -%}
+      {%- if product.description != blank -%}
+        <div class="pdp__desc rte">{{ product.description }}</div>
+      {%- endif -%}
 
-</div>{%- comment -%} /pdp {%- endcomment -%}
+    </div>
 
-{%- comment -%} Variant JSON for JS {%- endcomment -%}
+  </div>
+
+</div>
+
 <script type="application/json" id="pdp-variants-json">
   {{ product.variants | json }}
 </script>
 
 {% stylesheet %}
-  /* ── Layout ───────────────────────────────────────── */
+  /* ── Layout ──────────────────────────────────────────── */
   .pdp {
     display: grid;
     grid-template-columns: 1fr;
     gap: 0;
-    box-sizing: border-box;
   }
 
   @media (min-width: 768px) {
     .pdp {
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 48px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 40px 64px;
       align-items: start;
     }
   }
 
-  /* ── Gallery ─────────────────────────────────────── */
+  /* ── Gallery ─────────────────────────────────────────── */
   .pdp__gallery {
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
 
+  @media (min-width: 768px) {
+    .pdp__gallery {
+      flex-direction: row-reverse;
+      gap: 14px;
+      align-items: flex-start;
+    }
+  }
+
+  /* Main image */
   .pdp__main-img {
     aspect-ratio: 1 / 1;
     border-radius: 16px;
     background: var(--color-mist);
     overflow: hidden;
     position: relative;
+    flex: 1 1 auto;
+  }
+
+  @media (min-width: 768px) {
+    .pdp__main-img {
+      aspect-ratio: unset;
+      height: 560px;
+      border-radius: 20px;
+    }
   }
 
   .pdp__main-img-el {
@@ -415,18 +537,55 @@
     height: 100%;
   }
 
+  .pdp__zoom-hint {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-family: var(--font-label);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.92);
+    background: rgba(11, 18, 32, 0.48);
+    border-radius: 6px;
+    padding: 4px 8px;
+    pointer-events: none;
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  @media (hover: hover) {
+    .pdp__main-img:hover .pdp__zoom-hint {
+      opacity: 1;
+    }
+  }
+
+  /* Thumbnails */
   .pdp__thumbs {
     display: flex;
     flex-direction: row;
     gap: 8px;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     padding-bottom: 2px;
   }
 
   .pdp__thumbs::-webkit-scrollbar {
     display: none;
+  }
+
+  @media (min-width: 768px) {
+    .pdp__thumbs {
+      flex: 0 0 72px;
+      flex-direction: column;
+      gap: 10px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      max-height: 560px;
+      padding-bottom: 0;
+    }
   }
 
   .pdp__thumb {
@@ -441,6 +600,15 @@
     cursor: pointer;
     transition: border-color 0.15s ease;
     box-sizing: border-box;
+  }
+
+  @media (min-width: 768px) {
+    .pdp__thumb {
+      flex: 0 0 72px;
+      width: 72px;
+      height: 72px;
+      border-radius: 12px;
+    }
   }
 
   .pdp__thumb img {
@@ -459,36 +627,62 @@
     outline-offset: 2px;
   }
 
-  /* ── Info panel ──────────────────────────────────── */
-  .pdp__info {
+  /* ── Right column ────────────────────────────────────── */
+  .pdp__right {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    padding: 16px var(--page-gutter);
+    padding: 16px var(--page-gutter) 0;
   }
 
   @media (min-width: 768px) {
-    .pdp__info {
-      padding: 4px 0 0;
+    .pdp__right {
+      padding: 0;
     }
   }
 
-  /* ── Vendor ──────────────────────────────────────── */
-  .pdp__vendor {
+  /* ── Buy-box card ────────────────────────────────────── */
+  .pdp__buybox {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  @media (min-width: 768px) {
+    .pdp__buybox {
+      position: sticky;
+      top: 90px;
+      border: 1px solid #E7EAF3;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 12px 30px rgba(11, 18, 32, 0.06);
+      gap: 18px;
+      background: var(--color-white);
+    }
+  }
+
+  /* ── Eyebrow ─────────────────────────────────────────── */
+  .pdp__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     font-family: var(--font-label);
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--color-blue);
+    color: var(--accent, var(--color-blue));
     margin: 0;
     line-height: 1;
   }
 
-  /* ── Title ───────────────────────────────────────── */
+  .pdp__eyebrow-dot {
+    color: var(--color-ink-subtle);
+  }
+
+  /* ── Title ───────────────────────────────────────────── */
   .pdp__title {
     font-family: var(--font-display);
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 800;
     line-height: 1.1;
     letter-spacing: -0.02em;
@@ -496,46 +690,28 @@
     margin: 0;
   }
 
-  /* ── Meta row ────────────────────────────────────── */
-  .pdp__meta-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  @media (min-width: 768px) {
+    .pdp__title {
+      font-size: 32px;
+    }
   }
 
-  .pdp__rating {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .pdp__stars {
-    color: var(--color-sun);
-    font-size: 13px;
-    letter-spacing: -1px;
-    line-height: 1;
-  }
-
-  .pdp__rating-num {
+  /* ── Tagline ─────────────────────────────────────────── */
+  .pdp__tagline {
     font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--color-ink);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-slate);
+    margin: 0;
   }
 
-  .pdp__meta-dot {
-    color: var(--color-ink-subtle);
-    font-size: 12px;
+  @media (min-width: 768px) {
+    .pdp__tagline {
+      font-size: 15px;
+    }
   }
 
-  .pdp__designs {
-    font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--color-ink-faint);
-  }
-
-  /* ── Price row ───────────────────────────────────── */
+  /* ── Price row ───────────────────────────────────────── */
   .pdp__price-row {
     display: flex;
     align-items: baseline;
@@ -581,7 +757,7 @@
     display: none;
   }
 
-  /* ── Variants ────────────────────────────────────── */
+  /* ── Variants ────────────────────────────────────────── */
   .pdp__variants {
     display: flex;
     flex-direction: column;
@@ -604,6 +780,14 @@
     margin: 0;
   }
 
+  /* ── Tier cards ──────────────────────────────────────── */
+  .pdp__tiers {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* Pills (standard) */
   .pdp__pills {
     display: flex;
     flex-wrap: wrap;
@@ -628,12 +812,12 @@
     line-height: 1;
   }
 
-  .pdp__pill:hover {
+  .pdp__pill:not(.pdp__tier):hover {
     border-color: var(--color-blue);
     color: var(--color-blue);
   }
 
-  .pdp__pill--active {
+  .pdp__pill--active:not(.pdp__tier) {
     border-color: var(--color-blue);
     color: var(--color-blue);
     background: var(--color-mist);
@@ -642,14 +826,12 @@
   .pdp__pill--soldout {
     color: var(--color-ink-subtle);
     border-color: var(--color-hairline);
-    text-decoration: line-through;
     cursor: not-allowed;
     opacity: 0.6;
   }
 
-  .pdp__pill--soldout:hover {
-    border-color: var(--color-hairline);
-    color: var(--color-ink-subtle);
+  .pdp__pill:not(.pdp__tier).pdp__pill--soldout {
+    text-decoration: line-through;
   }
 
   .pdp__pill:focus-visible {
@@ -657,7 +839,71 @@
     outline-offset: 2px;
   }
 
-  /* ── ATC row ─────────────────────────────────────── */
+  /* Tier overrides (after .pdp__pill so they win) */
+  .pdp__tier {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    justify-content: flex-start;
+    width: 100%;
+    text-align: left;
+  }
+
+  .pdp__tier:not(.pdp__pill--soldout):hover {
+    border-color: var(--color-blue);
+  }
+
+  .pdp__tier.pdp__pill--active {
+    border-color: var(--color-blue);
+    background: var(--color-mist);
+    color: var(--color-ink);
+  }
+
+  .pdp__tier.pdp__pill--soldout {
+    text-decoration: none;
+  }
+
+  .pdp__tier-qty {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-ink);
+    flex: 0 0 auto;
+  }
+
+  .pdp__tier-price {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-ink);
+    margin-left: auto;
+    flex: 0 0 auto;
+  }
+
+  .pdp__tier-per {
+    font-family: var(--font-body);
+    font-size: 11px;
+    color: var(--color-slate);
+    flex: 0 0 auto;
+  }
+
+  .pdp__tier-save {
+    font-family: var(--font-label);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-white);
+    background: var(--color-in-stock);
+    border-radius: 99px;
+    padding: 2px 7px;
+    flex: 0 0 auto;
+    line-height: 1.4;
+  }
+
+  /* ── ATC row ─────────────────────────────────────────── */
   .pdp__atc-row {
     display: flex;
     align-items: stretch;
@@ -737,10 +983,11 @@
     transition: background 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
     font-family: var(--font-body);
     line-height: 1;
-    padding: 0 20px;
+    padding: 0 18px;
     display: flex;
     align-items: center;
     justify-content: center;
+    white-space: nowrap;
   }
 
   .pdp__atc:hover:not(:disabled) {
@@ -760,7 +1007,7 @@
     outline-offset: 2px;
   }
 
-  /* ── Discreet shipping ───────────────────────────── */
+  /* ── Discreet shipping ───────────────────────────────── */
   .pdp__discreet {
     display: flex;
     align-items: center;
@@ -777,89 +1024,49 @@
     color: var(--color-slate);
   }
 
-  /* ── Volume pricing ──────────────────────────────── */
-  .pdp__volume {
-    border: 1px solid var(--color-hairline);
-    border-radius: 12px;
-    overflow: hidden;
+  /* ── Proof checklist ──────────────────────────────────── */
+  .pdp__proof {
+    list-style: none;
+    padding: 14px 0 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    border-top: 1px solid var(--color-hairline);
   }
 
-  .pdp__volume-toggle {
-    width: 100%;
+  .pdp__proof li {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 12px 14px;
-    background: none;
-    border: none;
-    cursor: pointer;
     gap: 8px;
-  }
-
-  .pdp__volume-toggle:focus-visible {
-    outline: 2px solid var(--color-blue);
-    outline-offset: -2px;
-  }
-
-  .pdp__volume-label {
     font-family: var(--font-body);
     font-size: 13px;
-    font-weight: 600;
-    color: var(--color-ink);
+    font-weight: 500;
+    color: var(--color-slate);
   }
 
-  .pdp__chevron {
-    color: var(--color-slate);
+  .pdp__proof li svg {
+    width: 14px;
+    height: 14px;
     flex: 0 0 auto;
-    transition: transform 0.2s ease;
+    stroke: var(--color-in-stock);
   }
 
-  .pdp__volume-toggle[aria-expanded="true"] .pdp__chevron {
-    transform: rotate(180deg);
+  /* ── Below fold ───────────────────────────────────────── */
+  .pdp__below {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
   }
 
-  .pdp__volume-body {
-    border-top: 1px solid var(--color-hairline);
-    padding: 0;
+  @media (min-width: 768px) {
+    .pdp__below {
+      margin-top: 24px;
+    }
   }
 
-  .pdp__vol-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: var(--font-body);
-    font-size: 12px;
-  }
-
-  .pdp__vol-table th {
-    padding: 8px 10px;
-    text-align: left;
-    font-weight: 600;
-    color: var(--color-slate);
-    background: var(--color-mist);
-    border-bottom: 1px solid var(--color-hairline);
-    white-space: nowrap;
-  }
-
-  .pdp__vol-table td {
-    padding: 9px 10px;
-    color: var(--color-ink);
-    border-bottom: 1px solid var(--color-hairline);
-  }
-
-  .pdp__vol-table tr:last-child td {
-    border-bottom: none;
-  }
-
-  .pdp__vol-save {
-    font-family: var(--font-label);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--color-in-stock);
-  }
-
-  /* ── Spec accordion ──────────────────────────────── */
+  /* ── Spec accordion ──────────────────────────────────── */
   .pdp__specs {
     display: flex;
     flex-direction: column;
@@ -929,19 +1136,19 @@
     margin: 0;
   }
 
-  /* ── Description ─────────────────────────────────── */
+  /* ── Description ─────────────────────────────────────── */
   .pdp__desc {
     font-family: var(--font-body);
     font-size: 14px;
     line-height: 1.6;
     color: var(--color-slate);
-    padding-top: 4px;
+    padding-top: 20px;
   }
 
   .pdp__desc p { margin: 0 0 10px; }
   .pdp__desc p:last-child { margin-bottom: 0; }
 
-  /* ── SR-only utility ──────────────────────────────── */
+  /* ── SR-only utility ──────────────────────────────────── */
   .sr-only {
     position: absolute;
     width: 1px;
@@ -986,7 +1193,6 @@
       initThumbnails();
       initQtyStepper();
       initPills();
-      initVolumePricing();
       initAtcAjax();
     }
 
@@ -997,7 +1203,7 @@
       var atcText = document.getElementById('pdp-atc-text');
       if (!form || !atcBtn) return;
 
-      var addLabel = atcBtn.getAttribute('data-add-text') || (atcText ? atcText.textContent.trim() : 'Add to cart');
+      var addLabel = atcBtn.getAttribute('data-add-text') || 'Add to cart';
       var addedLabel = atcBtn.getAttribute('data-added-text') || 'Added!';
 
       form.addEventListener('submit', function (e) {
@@ -1022,7 +1228,10 @@
             document.dispatchEvent(new CustomEvent('cart:open'));
             setTimeout(function () {
               atcBtn.disabled = false;
-              if (atcText) atcText.textContent = addLabel;
+              if (atcText) {
+                var price = currentVariant ? ' · ' + formatMoney(currentVariant.price) : '';
+                atcText.textContent = addLabel + price;
+              }
             }, 1200);
           })
           .catch(function () {
@@ -1064,16 +1273,12 @@
 
       minus.addEventListener('click', function () {
         var val = parseInt(input.value, 10) || 1;
-        if (val > 1) {
-          input.value = val - 1;
-        }
+        if (val > 1) input.value = val - 1;
       });
 
       plus.addEventListener('click', function () {
         var val = parseInt(input.value, 10) || 1;
-        if (val < 99) {
-          input.value = val + 1;
-        }
+        if (val < 99) input.value = val + 1;
       });
 
       input.addEventListener('change', function () {
@@ -1083,7 +1288,7 @@
       });
     }
 
-    /* ─── Pill selection + variant sync ──────────────── */
+    /* ─── Pill / tier selection ───────────────────────── */
     function initPills() {
       var pills = document.querySelectorAll('.pdp__pill');
       pills.forEach(function (pill) {
@@ -1093,7 +1298,7 @@
           var optionValue = pill.getAttribute('data-option-value');
           selectedOptions[optionIndex] = optionValue;
 
-          var group = pill.closest('.pdp__pills');
+          var group = pill.closest('.pdp__pills, .pdp__tiers');
           if (group) {
             group.querySelectorAll('.pdp__pill').forEach(function (p) {
               p.classList.remove('pdp__pill--active');
@@ -1118,9 +1323,7 @@
         var o1 = selectedOptions[0] === null || variant.option1 === selectedOptions[0];
         var o2 = selectedOptions[1] === null || variant.option2 === selectedOptions[1];
         var o3 = selectedOptions[2] === null || variant.option3 === selectedOptions[2];
-        if (o1 && o2 && o3) {
-          matched = variant;
-        }
+        if (o1 && o2 && o3) matched = variant;
       });
 
       if (!matched) return;
@@ -1131,16 +1334,12 @@
 
       updatePrice(matched);
       updateAtcButton(matched);
-      updateVolumePricing(matched);
     }
 
     function formatMoney(cents) {
       if (cents === null || cents === undefined) return '';
       var pounds = cents / 100;
-      if (pounds % 1 === 0) {
-        return '£' + pounds.toFixed(0);
-      }
-      return '£' + pounds.toFixed(2);
+      return '£' + (pounds % 1 === 0 ? pounds.toFixed(0) : pounds.toFixed(2));
     }
 
     function updatePrice(variant) {
@@ -1172,40 +1371,11 @@
       if (!btn || !txt) return;
       if (variant.available) {
         btn.disabled = false;
-        txt.textContent = btn.getAttribute('data-add-text') || 'Add to cart';
+        txt.textContent = (btn.getAttribute('data-add-text') || 'Add to cart') + ' · ' + formatMoney(variant.price);
       } else {
         btn.disabled = true;
         txt.textContent = btn.getAttribute('data-soldout-text') || 'Sold out';
       }
-    }
-
-    /* ─── Volume pricing toggle ───────────────────────── */
-    function initVolumePricing() {
-      var toggle = document.getElementById('pdp-volume-toggle');
-      var body = document.getElementById('pdp-volume-table');
-      if (!toggle || !body) return;
-
-      toggle.addEventListener('click', function () {
-        var expanded = toggle.getAttribute('aria-expanded') === 'true';
-        toggle.setAttribute('aria-expanded', String(!expanded));
-        if (expanded) {
-          body.hidden = true;
-        } else {
-          body.hidden = false;
-        }
-      });
-    }
-
-    function updateVolumePricing(variant) {
-      var p1 = document.getElementById('pdp-vol-price-1');
-      var p3 = document.getElementById('pdp-vol-price-3');
-      var p6 = document.getElementById('pdp-vol-price-6');
-      if (!p1 || !p3 || !p6) return;
-
-      var base = variant.price;
-      p1.textContent = formatMoney(base);
-      p3.textContent = formatMoney(Math.round(base * 0.9));
-      p6.textContent = formatMoney(Math.round(base * 0.83));
     }
 
     if (document.readyState === 'loading') {
@@ -1222,8 +1392,8 @@
   "settings": [
     {
       "type": "checkbox",
-      "id": "show_volume_pricing",
-      "label": "t:labels.show_volume_pricing",
+      "id": "show_proof_list",
+      "label": "t:labels.show_proof_list",
       "default": true
     }
   ],

@@ -1,28 +1,18 @@
-{%- comment -%} Skip-to-content link for keyboard / screen-reader users {%- endcomment -%}
 <a class="skip-link" href="#main-content">{{ 'general.accessibility.skip_content' | t }}</a>
 
-{%- comment -%} Announcement bar — scrolls away, not sticky {%- endcomment -%}
 {%- if settings.show_announcement and settings.announcement_text != blank -%}
   <div class="announcement-bar" id="announcement-bar" role="status" aria-label="{{ settings.announcement_text | escape }}">
     <p class="announcement-bar__text">{{- settings.announcement_text | escape -}}</p>
-    <button
-      class="announcement-bar__close"
-      id="announcement-close"
-      type="button"
-      aria-label="{{ 'general.accessibility.close' | t }}"
-    >
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M18 6 6 18M6 6l12 12"/>
-      </svg>
+    <button class="announcement-bar__close" id="announcement-close" type="button" aria-label="{{ 'general.accessibility.close' | t }}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
   </div>
 {%- endif -%}
 
-{%- comment -%} Sticky header {%- endcomment -%}
 <header class="site-header" id="site-header">
   <div class="site-header__inner">
 
-    {%- comment -%} Left: hamburger + logo {%- endcomment -%}
+    {%- comment -%} Left: hamburger (mobile) + logo {%- endcomment -%}
     <div class="site-header__left">
       <button
         class="site-header__menu-btn"
@@ -32,43 +22,38 @@
         aria-controls="nav-overlay"
         aria-label="{{ 'general.accessibility.open_menu' | t }}"
       >
-        <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M3 6h18M3 12h18M3 18h18"/>
-        </svg>
-        <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M18 6 6 18M6 6l12 12"/>
-        </svg>
+        <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
 
       <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="{{ shop.name }}">
         {%- if section.settings.logo != blank -%}
-          {{- section.settings.logo
-            | image_url: width: 200
-            | image_tag:
-              alt: shop.name,
-              loading: 'eager',
-              fetchpriority: 'high',
-              class: 'site-header__logo-img'
-          -}}
+          {{- section.settings.logo | image_url: width: 200 | image_tag: alt: shop.name, loading: 'eager', fetchpriority: 'high', class: 'site-header__logo-img' -}}
         {%- else -%}
-          <img
-            src="{{ 'stink-safe-logo.png' | asset_url }}"
-            alt="{{ shop.name | escape }}"
-            class="site-header__logo-img"
-            loading="eager"
-            fetchpriority="high"
-            width="140"
-            height="36"
-          >
+          <img src="{{ 'stink-safe-logo.png' | asset_url }}" alt="{{ shop.name | escape }}" class="site-header__logo-img" loading="eager" fetchpriority="high" width="140" height="36">
         {%- endif -%}
       </a>
     </div>
 
-    {%- comment -%} Right: desktop nav + icons {%- endcomment -%}
-    <div class="site-header__right">
-
-      <nav class="site-header__nav" aria-label="{{ 'general.accessibility.main_nav' | t }}">
-        {%- for link in section.settings.menu.links -%}
+    {%- comment -%} Center: desktop nav {%- endcomment -%}
+    <nav class="site-header__nav" aria-label="{{ 'general.accessibility.main_nav' | t }}">
+      {%- for link in section.settings.menu.links -%}
+        {%- assign link_title_lower = link.title | downcase -%}
+        {%- if link_title_lower == 'shop' -%}
+          <div class="site-header__nav-item site-header__nav-item--shop" id="mega-trigger">
+            <a
+              href="{{ link.url }}"
+              class="site-header__nav-link{% if link.active %} is-active{% endif %}"
+              {% if link.active %}aria-current="page"{% endif %}
+              aria-haspopup="true"
+              aria-expanded="false"
+              id="mega-trigger-link"
+            >
+              {{- link.title -}}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="site-header__nav-chevron"><path d="m6 9 6 6 6-6"/></svg>
+            </a>
+          </div>
+        {%- else -%}
           <a
             href="{{ link.url }}"
             class="site-header__nav-link{% if link.active %} is-active{% endif %}"
@@ -76,14 +61,17 @@
           >
             {{- link.title -}}
           </a>
-        {%- endfor -%}
-      </nav>
+        {%- endif -%}
+      {%- endfor -%}
+      <span class="site-header__nav-link site-header__nav-link--coming-soon" aria-disabled="true" title="{{ 'general.coming_soon' | t }}">
+        {{ 'general.accessories_label' | t }}
+      </span>
+    </nav>
 
+    {%- comment -%} Right: icon buttons {%- endcomment -%}
+    <div class="site-header__right">
       <a href="{{ routes.search_url }}" class="site-header__icon" aria-label="{{ 'search.title' | t }}">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="11" cy="11" r="7"/>
-          <path d="m20 20-3.2-3.2"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
       </a>
 
       {%- if shop.customer_accounts_enabled -%}
@@ -92,10 +80,7 @@
           class="site-header__icon"
           aria-label="{{ 'customers.login.title' | t }}"
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="8" r="3.6"/>
-            <path d="M5 20c0-3.6 3.1-5.6 7-5.6s7 2 7 5.6"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3.1-5.6 7-5.6s7 2 7 5.6"/></svg>
         </a>
       {%- endif -%}
 
@@ -108,11 +93,7 @@
         aria-controls="CartDrawer"
         onclick="window.CartDrawer && window.CartDrawer.open()"
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="9.5" cy="20" r="1.3"/>
-          <circle cx="17" cy="20" r="1.3"/>
-          <path d="M3 4h2.2l2 11h9.6l1.8-8H6.5"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9.5" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/><path d="M3 4h2.2l2 11h9.6l1.8-8H6.5"/></svg>
         <span
           class="site-header__cart-badge"
           id="cart-count"
@@ -121,54 +102,77 @@
           {% if cart.item_count == 0 %}hidden{% endif %}
         >{{- cart.item_count -}}</span>
       </button>
+    </div>
+  </div>
+
+  {%- comment -%} Shop mega-menu — desktop only, shown on hover {%- endcomment -%}
+  <div class="mega-menu" id="mega-menu" aria-hidden="true" role="region" aria-label="{{ 'general.accessibility.shop_menu' | t }}">
+    <div class="mega-menu__inner">
+
+      <div class="mega-menu__col">
+        <p class="mega-menu__heading">{{ 'general.shop_all' | t }}</p>
+        <a href="{{ routes.all_products_collection_url }}" class="mega-menu__link mega-menu__link--featured">{{ 'general.shop_all' | t }}</a>
+        <a href="{{ section.settings.mega_bundles_url | default: '/collections/bundles' }}" class="mega-menu__link">{{ 'general.bundles_label' | t }}</a>
+      </div>
+
+      <div class="mega-menu__col">
+        <p class="mega-menu__heading">{{ 'general.by_collection' | t }}</p>
+        <a href="{{ section.settings.mega_crimewave_url | default: '/collections/cartoon-crimewave' }}" class="mega-menu__collection-link">
+          <span class="mega-menu__dot" style="--accent: #F4A300"></span>
+          <span>Cartoon Crimewave</span>
+        </a>
+        <a href="{{ section.settings.mega_snackverse_url | default: '/collections/snackverse' }}" class="mega-menu__collection-link">
+          <span class="mega-menu__dot" style="--accent: #EC4899"></span>
+          <span>Snackverse</span>
+        </a>
+        <a href="{{ section.settings.mega_horror_highs_url | default: '/collections/horror-highs' }}" class="mega-menu__collection-link">
+          <span class="mega-menu__dot" style="--accent: #7C3AED"></span>
+          <span>Horror Highs</span>
+          <span class="mega-menu__age" style="--age-color: #7C3AED">18+</span>
+        </a>
+        <a href="{{ section.settings.mega_horror_hotbox_url | default: '/collections/horror-hotbox' }}" class="mega-menu__collection-link">
+          <span class="mega-menu__dot" style="--accent: #991B1B"></span>
+          <span>Horror Hotbox</span>
+          <span class="mega-menu__age" style="--age-color: #991B1B">18+</span>
+        </a>
+      </div>
+
+      <div class="mega-menu__col">
+        <div class="mega-menu__promo">
+          <span class="mega-menu__promo-badge">{{ 'general.best_value' | t }}</span>
+          <p class="mega-menu__promo-title">{{ 'general.mega_promo_title' | t }}</p>
+          <p class="mega-menu__promo-sub">{{ 'general.mega_promo_sub' | t }}</p>
+          <a href="{{ section.settings.mega_promo_url | default: '/products/collectors-crate' }}" class="mega-menu__promo-btn">{{ 'general.mega_promo_cta' | t }}</a>
+        </div>
+      </div>
 
     </div>
   </div>
 </header>
 
+{%- comment -%} Backdrop for mega-menu (desktop) {%- endcomment -%}
+<div class="mega-backdrop" id="mega-backdrop" aria-hidden="true"></div>
+
 {%- comment -%} Mobile full-screen nav overlay {%- endcomment -%}
-<div
-  class="nav-overlay"
-  id="nav-overlay"
-  role="dialog"
-  aria-modal="true"
-  aria-label="{{ 'general.accessibility.main_nav' | t }}"
-  aria-hidden="true"
->
+<div class="nav-overlay" id="nav-overlay" role="dialog" aria-modal="true" aria-label="{{ 'general.accessibility.main_nav' | t }}" aria-hidden="true">
   <div class="nav-overlay__header">
     <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="{{ shop.name }}" tabindex="-1">
       {%- if section.settings.logo != blank -%}
         {{- section.settings.logo | image_url: width: 200 | image_tag: alt: shop.name, loading: 'lazy', class: 'site-header__logo-img' -}}
       {%- else -%}
-        <img
-          src="{{ 'stink-safe-logo.png' | asset_url }}"
-          alt="{{ shop.name | escape }}"
-          class="site-header__logo-img"
-          loading="lazy"
-          width="140"
-          height="36"
-        >
+        <img src="{{ 'stink-safe-logo.png' | asset_url }}" alt="{{ shop.name | escape }}" class="site-header__logo-img" loading="lazy" width="140" height="36">
       {%- endif -%}
     </a>
-    <button
-      class="nav-overlay__close"
-      id="nav-close"
-      type="button"
-      aria-label="{{ 'general.accessibility.close_menu' | t }}"
-      tabindex="-1"
-    >
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M18 6 6 18M6 6l12 12"/>
-      </svg>
+    <button class="nav-overlay__close" id="nav-close" type="button" aria-label="{{ 'general.accessibility.close_menu' | t }}" tabindex="-1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
   </div>
 
   <nav class="nav-overlay__nav" aria-label="{{ 'general.accessibility.main_nav' | t }}">
     {%- for link in section.settings.menu.links -%}
-      <a href="{{ link.url }}" class="nav-overlay__link" tabindex="-1">
-        {{- link.title -}}
-      </a>
+      <a href="{{ link.url }}" class="nav-overlay__link" tabindex="-1">{{- link.title -}}</a>
     {%- endfor -%}
+    <span class="nav-overlay__link nav-overlay__link--coming-soon" aria-disabled="true">{{ 'general.accessories_label' | t }}</span>
   </nav>
 
   <div class="nav-overlay__footer">
@@ -181,9 +185,7 @@
 <div class="nav-overlay__backdrop" id="nav-backdrop" aria-hidden="true"></div>
 
 {% stylesheet %}
-  /* --------------------------------------------------------
-     Skip link
-  -------------------------------------------------------- */
+  /* ---- Skip link ---- */
   .skip-link {
     position: absolute;
     top: -100%;
@@ -195,15 +197,13 @@
     font-size: 14px;
     font-weight: 700;
     padding: 10px 16px;
-    border-radius: 0 0 var(--radius-btn) var(--radius-btn);
+    border-radius: 0 0 8px 8px;
     text-decoration: none;
     transition: top 120ms ease;
   }
   .skip-link:focus { top: 0; }
 
-  /* --------------------------------------------------------
-     Announcement bar
-  -------------------------------------------------------- */
+  /* ---- Announcement bar ---- */
   .announcement-bar {
     background: var(--color-ink);
     color: var(--color-white);
@@ -214,7 +214,6 @@
     padding: 9px 16px;
     position: relative;
   }
-
   .announcement-bar__text {
     font-family: var(--font-label);
     font-size: 10px;
@@ -225,7 +224,6 @@
     line-height: 1.2;
     flex: 1;
   }
-
   .announcement-bar__close {
     background: transparent;
     border: none;
@@ -243,17 +241,15 @@
   .announcement-bar__close:hover { color: var(--color-white); }
   .announcement-bar[hidden] { display: none; }
 
-  /* --------------------------------------------------------
-     Site header
-  -------------------------------------------------------- */
+  /* ---- Site header ---- */
   .site-header {
     position: sticky;
     top: 0;
     z-index: 100;
-    height: 54px;
-    background: rgba(255, 255, 255, 0.94);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    height: 60px;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--color-hairline);
   }
 
@@ -262,14 +258,14 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 var(--page-gutter);
+    padding: 0 16px;
   }
 
   .site-header__left,
   .site-header__right {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
   }
 
   /* Logo */
@@ -279,19 +275,12 @@
     text-decoration: none;
   }
   .site-header__logo-img {
-    height: 36px;
+    height: 34px;
     width: auto;
     display: block;
   }
-  .site-header__shop-name {
-    font-family: var(--font-display);
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--color-ink);
-    letter-spacing: -0.02em;
-  }
 
-  /* Hamburger button */
+  /* Hamburger button (mobile only) */
   .site-header__menu-btn {
     background: none;
     border: none;
@@ -306,8 +295,6 @@
   }
   .site-header__menu-btn svg { width: 22px; height: 22px; }
   .site-header__menu-btn:hover { color: var(--color-ink); }
-
-  /* Toggle the hamburger ↔ X icon */
   .site-header__menu-btn .icon-close { display: none; }
   .site-header__menu-btn[aria-expanded="true"] .icon-menu { display: none; }
   .site-header__menu-btn[aria-expanded="true"] .icon-close { display: block; }
@@ -315,7 +302,12 @@
   /* Desktop nav — hidden on mobile */
   .site-header__nav {
     display: none;
-    gap: 4px;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .site-header__nav-item {
+    position: relative;
   }
 
   .site-header__nav-link {
@@ -324,14 +316,39 @@
     font-weight: 600;
     color: var(--color-slate);
     text-decoration: none;
-    padding: 6px 10px;
-    border-radius: 8px;
+    padding: 6px 11px;
+    border-radius: 9px;
     transition: color 120ms, background 120ms;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+    background: none;
+    border: none;
   }
   .site-header__nav-link:hover,
   .site-header__nav-link.is-active {
     color: var(--color-ink);
     background: var(--color-mist);
+  }
+  .site-header__nav-chevron {
+    width: 12px;
+    height: 12px;
+    flex: 0 0 auto;
+    transition: transform 180ms ease;
+  }
+  .site-header__nav-item--shop.mega-is-open .site-header__nav-chevron {
+    transform: rotate(180deg);
+  }
+  .site-header__nav-link--coming-soon {
+    color: var(--color-ink-faint);
+    cursor: default;
+    font-style: italic;
+    user-select: none;
+  }
+  .site-header__nav-link--coming-soon:hover {
+    color: var(--color-ink-faint);
+    background: none;
   }
 
   /* Icon buttons */
@@ -340,23 +357,23 @@
     border: none;
     cursor: pointer;
     color: var(--color-slate);
-    padding: 4px;
+    padding: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 6px;
+    border-radius: 8px;
     text-decoration: none;
-    transition: color 120ms;
+    transition: color 120ms, background 120ms;
     position: relative;
   }
   .site-header__icon svg { width: 20px; height: 20px; }
-  .site-header__icon:hover { color: var(--color-ink); }
+  .site-header__icon:hover { color: var(--color-ink); background: var(--color-mist); }
 
   /* Cart badge */
   .site-header__cart-badge {
     position: absolute;
-    top: -6px;
-    right: -6px;
+    top: -4px;
+    right: -4px;
     background: var(--color-blue);
     color: var(--color-white);
     font-family: var(--font-body);
@@ -370,9 +387,156 @@
   }
   .site-header__cart-badge[hidden] { display: none; }
 
-  /* --------------------------------------------------------
-     Mobile nav overlay
-  -------------------------------------------------------- */
+  /* ---- Mega-menu ---- */
+  .mega-menu {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    background: var(--color-white);
+    border-bottom: 1px solid var(--color-hairline);
+    box-shadow: 0 16px 40px rgba(11, 18, 32, 0.10);
+    z-index: 99;
+    display: none;
+  }
+  .mega-menu.is-open { display: block; }
+
+  .mega-menu__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 40px;
+    display: grid;
+    grid-template-columns: 1fr 1.6fr 1.2fr;
+    gap: 48px;
+  }
+
+  .mega-menu__heading {
+    font-family: var(--font-label);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-ink-faint);
+    margin-bottom: 14px;
+  }
+
+  .mega-menu__link {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-slate);
+    text-decoration: none;
+    padding: 7px 0;
+    transition: color 120ms;
+  }
+  .mega-menu__link:hover { color: var(--color-blue); }
+  .mega-menu__link--featured {
+    color: var(--color-ink);
+    font-weight: 700;
+  }
+
+  .mega-menu__collection-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-slate);
+    text-decoration: none;
+    padding: 8px 0;
+    transition: color 120ms;
+  }
+  .mega-menu__collection-link:hover { color: var(--color-ink); }
+  .mega-menu__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    background: var(--accent);
+    flex: 0 0 auto;
+  }
+  .mega-menu__age {
+    font-family: var(--font-body);
+    font-size: 9px;
+    font-weight: 800;
+    color: var(--age-color, #7C3AED);
+    border: 1px solid currentColor;
+    border-radius: 20px;
+    padding: 2px 5px;
+    margin-left: auto;
+    flex: 0 0 auto;
+  }
+
+  .mega-menu__promo {
+    background: linear-gradient(135deg, #FFF6E2, #FFE9C2);
+    border: 1px solid #F4D89A;
+    border-radius: 16px;
+    padding: 24px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .mega-menu__promo-badge {
+    display: inline-block;
+    background: var(--color-sun);
+    color: #7A5200;
+    font-family: var(--font-body);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 6px;
+    width: fit-content;
+  }
+  .mega-menu__promo-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--color-ink);
+    line-height: 1.2;
+    margin-top: 4px;
+  }
+  .mega-menu__promo-sub {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: #7A5C20;
+    line-height: 1.5;
+    flex: 1;
+  }
+  .mega-menu__promo-btn {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-blue);
+    text-decoration: none;
+    margin-top: 4px;
+    transition: color 120ms;
+  }
+  .mega-menu__promo-btn:hover { color: var(--color-blue-pressed); }
+
+  /* Backdrop for mega-menu */
+  .mega-backdrop {
+    position: fixed;
+    inset: 0;
+    top: 60px;
+    z-index: 90;
+    background: rgba(11, 18, 32, 0.3);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms ease;
+    display: none;
+  }
+  .mega-backdrop.is-open {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ---- Mobile nav overlay ---- */
   .nav-overlay {
     position: fixed;
     inset: 0;
@@ -385,10 +549,7 @@
     overscroll-behavior: contain;
     overflow-y: auto;
   }
-
-  .nav-overlay.is-open {
-    transform: translateX(0);
-  }
+  .nav-overlay.is-open { transform: translateX(0); }
 
   .nav-overlay__backdrop {
     position: fixed;
@@ -399,19 +560,15 @@
     pointer-events: none;
     transition: opacity 280ms ease;
   }
-
-  .nav-overlay__backdrop.is-open {
-    opacity: 1;
-    pointer-events: auto;
-  }
+  .nav-overlay__backdrop.is-open { opacity: 1; pointer-events: auto; }
 
   .nav-overlay__header {
-    height: 54px;
+    height: 60px;
     flex: 0 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 var(--page-gutter);
+    padding: 0 16px;
     border-bottom: 1px solid var(--color-hairline);
   }
 
@@ -434,7 +591,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 12px var(--page-gutter);
+    padding: 12px 16px;
   }
 
   .nav-overlay__link {
@@ -451,13 +608,18 @@
   }
   .nav-overlay__link:last-child { border-bottom: none; }
   .nav-overlay__link:hover { color: var(--color-blue); }
+  .nav-overlay__link--coming-soon {
+    color: var(--color-ink-faint);
+    font-style: italic;
+    cursor: default;
+  }
+  .nav-overlay__link--coming-soon:hover { color: var(--color-ink-faint); }
 
   .nav-overlay__footer {
     flex: 0 0 auto;
-    padding: 20px var(--page-gutter);
+    padding: 20px 16px;
     border-top: 1px solid var(--color-hairline);
   }
-
   .nav-overlay__announce {
     font-family: var(--font-label);
     font-size: 10px;
@@ -468,12 +630,17 @@
     text-align: center;
   }
 
-  /* --------------------------------------------------------
-     Breakpoint: tablet and up — show desktop nav, hide burger
-  -------------------------------------------------------- */
+  /* ---- Desktop breakpoint ---- */
   @media (min-width: 768px) {
+    .site-header__inner {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 0 40px;
+    }
     .site-header__menu-btn { display: none; }
     .site-header__nav { display: flex; }
+    .site-header__right { justify-self: end; }
   }
 {% endstylesheet %}
 
@@ -484,11 +651,8 @@
   /* ---- Announcement bar dismiss ---- */
   var announceBar = document.getElementById('announcement-bar');
   var announceClose = document.getElementById('announcement-close');
-
   if (announceBar && announceClose) {
-    if (sessionStorage.getItem('announce-dismissed')) {
-      announceBar.hidden = true;
-    }
+    if (sessionStorage.getItem('announce-dismissed')) announceBar.hidden = true;
     announceClose.addEventListener('click', function () {
       announceBar.hidden = true;
       sessionStorage.setItem('announce-dismissed', '1');
@@ -511,7 +675,6 @@
     overlayLinks.forEach(function (el) { el.removeAttribute('tabindex'); });
     navClose.focus();
   }
-
   function closeMenu() {
     navOverlay.classList.remove('is-open');
     backdrop.classList.remove('is-open');
@@ -525,38 +688,64 @@
   if (menuToggle) menuToggle.addEventListener('click', openMenu);
   if (navClose) navClose.addEventListener('click', closeMenu);
   if (backdrop) backdrop.addEventListener('click', closeMenu);
-
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && navOverlay && navOverlay.classList.contains('is-open')) {
-      closeMenu();
-    }
+    if (e.key === 'Escape' && navOverlay && navOverlay.classList.contains('is-open')) closeMenu();
   });
 
   /* ---- Cart count ---- */
   var cartBadge = document.getElementById('cart-count');
-
   function updateCartCount(count) {
     if (!cartBadge) return;
-    if (count > 0) {
-      cartBadge.textContent = count;
-      cartBadge.removeAttribute('hidden');
-    } else {
-      cartBadge.hidden = true;
-    }
+    if (count > 0) { cartBadge.textContent = count; cartBadge.removeAttribute('hidden'); }
+    else { cartBadge.hidden = true; }
+  }
+  document.addEventListener('cart:updated', function (e) {
+    if (e.detail && typeof e.detail.count === 'number') updateCartCount(e.detail.count);
+  });
+  fetch('/cart.js').then(function (r) { return r.json(); }).then(function (d) { updateCartCount(d.item_count); }).catch(function () {});
+
+  /* ---- Shop mega-menu (desktop hover) ---- */
+  var megaTrigger = document.getElementById('mega-trigger');
+  var megaTriggerLink = document.getElementById('mega-trigger-link');
+  var megaMenu = document.getElementById('mega-menu');
+  var megaBackdrop = document.getElementById('mega-backdrop');
+  var hideTimer = null;
+
+  function openMega() {
+    clearTimeout(hideTimer);
+    if (!megaMenu) return;
+    megaMenu.classList.add('is-open');
+    megaMenu.setAttribute('aria-hidden', 'false');
+    if (megaBackdrop) megaBackdrop.classList.add('is-open');
+    if (megaTrigger) megaTrigger.classList.add('mega-is-open');
+    if (megaTriggerLink) megaTriggerLink.setAttribute('aria-expanded', 'true');
   }
 
-  /* Listen for add-to-cart events dispatched by other sections */
-  document.addEventListener('cart:updated', function (e) {
-    if (e.detail && typeof e.detail.count === 'number') {
-      updateCartCount(e.detail.count);
-    }
-  });
+  function closeMega() {
+    hideTimer = setTimeout(function () {
+      if (!megaMenu) return;
+      megaMenu.classList.remove('is-open');
+      megaMenu.setAttribute('aria-hidden', 'true');
+      if (megaBackdrop) megaBackdrop.classList.remove('is-open');
+      if (megaTrigger) megaTrigger.classList.remove('mega-is-open');
+      if (megaTriggerLink) megaTriggerLink.setAttribute('aria-expanded', 'false');
+    }, 150);
+  }
 
-  /* Fetch current count on page load (keeps count accurate after navigation) */
-  fetch('/cart.js')
-    .then(function (r) { return r.json(); })
-    .then(function (data) { updateCartCount(data.item_count); })
-    .catch(function () {});
+  if (megaTrigger) {
+    megaTrigger.addEventListener('mouseenter', openMega);
+    megaTrigger.addEventListener('mouseleave', closeMega);
+  }
+  if (megaMenu) {
+    megaMenu.addEventListener('mouseenter', function () { clearTimeout(hideTimer); });
+    megaMenu.addEventListener('mouseleave', closeMega);
+  }
+  if (megaBackdrop) {
+    megaBackdrop.addEventListener('click', closeMega);
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && megaMenu && megaMenu.classList.contains('is-open')) closeMega();
+  });
 })();
 {% endjavascript %}
 
@@ -580,6 +769,40 @@
       "id": "customer_account_menu",
       "label": "t:labels.customer_account_menu",
       "default": "customer-account-main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Mega-menu collection URLs"
+    },
+    {
+      "type": "url",
+      "id": "mega_crimewave_url",
+      "label": "Cartoon Crimewave URL"
+    },
+    {
+      "type": "url",
+      "id": "mega_snackverse_url",
+      "label": "Snackverse URL"
+    },
+    {
+      "type": "url",
+      "id": "mega_horror_highs_url",
+      "label": "Horror Highs URL"
+    },
+    {
+      "type": "url",
+      "id": "mega_horror_hotbox_url",
+      "label": "Horror Hotbox URL"
+    },
+    {
+      "type": "url",
+      "id": "mega_bundles_url",
+      "label": "Bundles URL"
+    },
+    {
+      "type": "url",
+      "id": "mega_promo_url",
+      "label": "Promo tile URL (Collector's Crate)"
     }
   ]
 }
